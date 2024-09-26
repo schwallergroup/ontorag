@@ -16,6 +16,22 @@ class OntologyNER:
         self.create_combined_matcher()
         self.lineage_cache = defaultdict(dict)
 
+    def process_statement(self, statement):
+        recognized_concepts = self.recognize_concepts(statement)
+        
+        output = {}
+        for onto_name, concepts in recognized_concepts.items():
+            output[onto_name] = {
+                "concepts": concepts,
+                "terms": {}
+            }
+            for concept in concepts:
+                lineage = self.get_concept_lineage(concept, onto_name)
+                if lineage:
+                    output[onto_name]["terms"][concept] = lineage
+
+        return output
+
     def load_ontologies(self):
         ontologies = {}
         for filename in os.listdir(self.ontology_folder):
@@ -88,22 +104,6 @@ class OntologyNER:
         }
         self.lineage_cache[onto_name][concept] = lineage
         return lineage
-
-    def process_statement(self, statement):
-        recognized_concepts = self.recognize_concepts(statement)
-        
-        output = {}
-        for onto_name, concepts in recognized_concepts.items():
-            output[onto_name] = {
-                "concepts": concepts,
-                "terms": {}
-            }
-            for concept in concepts:
-                lineage = self.get_concept_lineage(concept, onto_name)
-                if lineage:
-                    output[onto_name]["terms"][concept] = lineage
-
-        return json.dumps(output, indent=2)
 
     def print_ontology_concepts(self, onto_name):
         if onto_name not in self.ontologies:
