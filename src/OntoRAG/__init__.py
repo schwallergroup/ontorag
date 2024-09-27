@@ -3,4 +3,4 @@
 """Ontology-based RAG for Scientific Discovery."""
 
 from .api import *  # noqa
-from .ontorag import OntoRAG  # noqa
+from .ontorag import BaseOntoRAG  # noqa

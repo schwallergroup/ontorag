@@ -9,30 +9,14 @@ from typing import Optional, List, Dict
 import json
 
 
-class OntoRAG(dspy.Module):
-    def __init__(self, num_passages=5, context=None, ontology_path: Optional[str] = None):
-        """Initialize the module with a document retriever, an ontology querier, and a predictor.
+class BaseOntoRAG(dspy.Module):
+    retriever: dspy.Retrieve
+    ontoretriever: OntoRetriever
 
-        Args:
-            num_passages: Number of passages to retrieve from the database.
-            context: Optional, passing the ground truth context.
-        """
-
-        super().__init__()
-        self.retriever = dspy.Retrieve(k=num_passages)
-        self.ontoretriever = OntoRetriever(ontology_path = ontology_path)
-
-        self.context = context
-        self.predictor = None
-
-    def forward(self, query: str) -> Tuple:
-        """Main loop of ontology-based RAG."""
-        pass
-
-    def retrieve(self, query: str):
+    def retrieve(self, query: str, ctxt_doc: Optional[str] = None) -> str:
         ctxt_doc, ctxt_onto = "", ""
 
-        if self.context is None:
+        if ctxt_doc is None:
             ctxt_dict = self.retrieve_doc(query)
             ctxt_doc = self.format_context(ctxt_dict)
 
@@ -55,8 +39,3 @@ class OntoRAG(dspy.Module):
     def fuse_contexts(self, ctxt_doc: str, ctxt_onto: str) -> str:
         """Fuse document and ontology contexts."""
         return ctxt_doc + ctxt_onto
-
-
-
-
-

@@ -21,8 +21,5 @@ class OntoRetriever(dspy.Module):
     def forward(self, query: str, context: Optional[str] = None) -> str:
         """Retrieve ontology context."""
 
-        # TODO: optionally, take query and context as input.
-        # the idea is that retrieved ontology gives structure to the retrieved information.
-
         onto_json = self.ontology.process_statement(query)
         return onto_json
