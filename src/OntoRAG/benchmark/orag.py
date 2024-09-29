@@ -25,10 +25,11 @@ class SimpleORAG(BaseOntoRAG):
         self.predictor = dspy.Predict(MedQnA)
         self.ontoretriever = OntoRetriever(ontology_path = ontology_path)
 
-    def forward(self, query: str) -> Tuple[MedQnA, str]:
-        context = self.retrieve(query)
-        answer = self.predictor(question=query, context=context)
-        return answer, context
+    def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
+        context = self.retrieve(qprompt)
+        answer = self.predictor(question=qprompt, context=context)
+        answer.context = context
+        return answer
 
 
 class HyQORAG(BaseOntoRAG):
@@ -39,16 +40,17 @@ class HyQORAG(BaseOntoRAG):
         self.final_predictor = dspy.Predict(MedQnA)
         self.ontoretriever = OntoRetriever(ontology_path = ontology_path)
 
-    def forward(self, query: str) -> Tuple[MedQnA, str]:
+    def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
         # Generate hypothetical answer
-        ctxt0 = self.retrieve(query)
-        hans = self.hypot_answer(question=query, context=ctxt0)
+        ctxt0 = self.retrieve(qprompt)
+        hans = self.hypot_answer(question=qprompt, context=ctxt0)
 
         # Query concepts in hypothetical answer
         ctxt1 = self.retrieve(hans.reasoning + hans.choice_answer)
-        answer = self.final_predictor(question=query, context=ctxt1)
+        answer = self.final_predictor(question=qprompt, context=ctxt1)
 
-        return answer, ctxt1
+        answer.context = ctxt1
+        return answer
 
 
 if __name__ == '__main__':

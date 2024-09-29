@@ -45,7 +45,8 @@ class QAZeroShot(dspy.Module):
 
     def forward(self, qprompt: str) -> Tuple[MedQnA_ZeroShot, str]:
         answer = self.predict(question=qprompt)
-        return answer, None
+        answer.context = None
+        return answer
 
 class QAContext(dspy.Module):
     """Ask question, retrieve context and directly get answer."""
@@ -57,7 +58,8 @@ class QAContext(dspy.Module):
     def forward(self, qprompt: str) -> Tuple[MedQnA_Context, str]:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
-        return answer, context
+        answer.context = context
+        return answer
 
     def retrieve(self, qprompt: str) -> str:
         """Update this with real retrieval."""
@@ -72,7 +74,8 @@ class QAReason(dspy.Module):
 
     def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
         answer = self.predictor(question=qprompt)
-        return answer, None
+        answer.context = None
+        return answer
 
 class QAFull(dspy.Module):
     """Ask question, quert context, get reasoning and answer."""
@@ -84,7 +87,8 @@ class QAFull(dspy.Module):
     def forward(self, qprompt: str) -> Tuple[MedQnA_Full, str]:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
-        return answer, context
+        answer.context = context
+        return answer
 
     def retrieve(self, qprompt: str) -> str:
         """Update this with real retrieval."""
@@ -101,7 +105,8 @@ class QATwoStep(dspy.Module):
     def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
         answer0 = self.predictor(question=qprompt)
         answer = self.predictor(question=answer0.reasoning + answer0.choice_answer)
-        return answer, None
+        answer.context = None
+        return answer
 
 if __name__ == '__main__':
     load_dotenv()
