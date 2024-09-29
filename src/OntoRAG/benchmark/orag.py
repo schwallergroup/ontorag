@@ -4,7 +4,7 @@ from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
 from dotenv import load_dotenv
 import dspy
-from typing import Literal, Tuple, Optional
+from typing import Literal, Tuple, Optional, Union
 
 __all__ = ['SimpleORAG', 'HyQORAG']
 
@@ -20,10 +20,13 @@ class MedQnA(dspy.Signature):
 
 class SimpleORAG(BaseOntoRAG):
     """Identify and query concepts in question, then generate answer."""
-    def __init__(self, ontology_path, context: Optional[str] = None):
+    def __init__(self, ontology: Union[str, OntoRetriever], context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA)
-        self.ontoretriever = OntoRetriever(ontology_path = ontology_path)
+        if isinstance(ontology, str):
+            self.ontoretriever = OntoRetriever(ontology_path = ontology)
+        else:
+            self.ontoretriever = ontology
 
     def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
         context = self.retrieve(qprompt)
@@ -34,11 +37,14 @@ class SimpleORAG(BaseOntoRAG):
 
 class HyQORAG(BaseOntoRAG):
     """Generate hypothetical answer, then query concepts in answer and reconsider response."""
-    def __init__(self, ontology_path, context: Optional[str] = None):
+    def __init__(self, ontology: Union[str, OntoRetriever], context: Optional[str] = None):
         super().__init__()
         self.hypot_answer = dspy.Predict(MedQnA)
         self.final_predictor = dspy.Predict(MedQnA)
-        self.ontoretriever = OntoRetriever(ontology_path = ontology_path)
+        if isinstance(ontology, str):
+            self.ontoretriever = OntoRetriever(ontology_path = ontology)
+        else:
+            self.ontoretriever = ontology
 
     def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
         # Generate hypothetical answer

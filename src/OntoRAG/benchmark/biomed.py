@@ -11,6 +11,7 @@ import argparse
 import wandb
 from dspy.evaluate import Evaluate
 from csvdatasets import CSVDataset
+from OntoRAG.utils import OntoRetriever
 
 
 NUM_THREADS = 4
@@ -88,14 +89,14 @@ def wandb_config(config: dict = None):
     finally:
         pass
 
-def run_one_method(method, ontology_path, llm, dfs, **kwargs):
+def run_one_method(method, ontology, llm, dfs, **kwargs):
     with wandb_config(config=dict(
         method=method,
-        ontology_path=ontology_path,
+        ontology_path=ontology.fpath if isinstance(ontology, OntoRetriever) else ontology,
         llm=llm,
         **kwargs
     )) as run:
-        orag = METHODS[method](ontology_path=ontology_path, context='')
+        orag = METHODS[method](ontology=ontology, context='')
         for df in dfs.values():
             run_benchmark(orag, df, run)
 
@@ -107,11 +108,13 @@ def main(
     ):
     init_dspy(llm = llm, **kwargs)
     dfs = load_biomed_benchmarks()
+    ontology = OntoRetriever(ontology_path=ontology_path)
+
     if method == 'all':
         for method in METHODS.keys():
-            run_one_method(method, ontology_path, llm, dfs, **kwargs)
+            run_one_method(method, ontology, llm, dfs, **kwargs)
     elif method in METHODS:
-        run_one_method(method, ontology_path, llm, dfs, **kwargs)
+        run_one_method(method, ontology, llm, dfs, **kwargs)
     else:
         raise ValueError(f"Method {method} not found.")
 

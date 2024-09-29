@@ -15,6 +15,7 @@ class OntoRetriever(dspy.Module):
             ontology: Path to a directory with ontologies.
         """
         super().__init__()
+        self.fpath = ontology_path
         self.ontology = OntologyNER(ontology_folder=ontology_path)
 
 
