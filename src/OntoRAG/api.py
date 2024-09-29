@@ -39,4 +39,4 @@ if __name__ == '__main__':
     dspy.settings.configure(lm=llm)
 
     orag = OntoRAG(ontology_path='data/test/ontologies/SNOMED', context='')
-    print(orag.forward('What kinds of health care encounter exist?'))
+    print(orag.forward('What kinds of health care encounters exist?'))
