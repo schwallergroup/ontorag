@@ -12,7 +12,7 @@ answer_col = {
 class CSVDataset(Dataset):
     def __init__(self, file_path, dfname, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        df = pd.read_csv(file_path, nrows=20)
+        df = pd.read_csv(file_path)
         df['answer'] = answer_col[dfname](df)
         self._dev = df.to_dict(orient='records')
         self.name = dfname

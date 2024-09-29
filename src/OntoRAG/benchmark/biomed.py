@@ -13,7 +13,6 @@ from csvdatasets import CSVDataset
 from OntoRAG.utils import OntoRetriever
 
 
-NUM_THREADS = 4
 METHODS = {
     'ontorag-simple': SimpleORAG,
     'ontorag-hypo_ans': HyQORAG,
@@ -69,12 +68,12 @@ def acc_metric_clean(gt, pred, trace=None):
     """Clean answer and compare with groundtruth."""
     return gt.answer == clean_model_answer(pred.choice_answer)
 
-def run_benchmark(rag: dspy.Module, df, run):
+def run_benchmark(rag: dspy.Module, df, run, num_threads=4):
     """Evaluate the method 'rag' on a dataset 'df'."""
     evaluate_program = Evaluate(
         devset=df.dev,
         metric=acc_metric_clean,
-        num_threads=NUM_THREADS,
+        num_threads=num_threads,
         display_progress=True,
         provide_traceback=True,
     )
@@ -97,7 +96,7 @@ def run_one_method(method, ontology, llm, dfs, **kwargs):
     ) as run:
         orag = METHODS[method](ontology=ontology, context='')
         for df in dfs.values():
-            run_benchmark(orag, df, run)
+            run_benchmark(orag, df, run, num_threads=kwargs.get('num_threads', 4))
 
 def main(
         method: str = 'ontorag-simple',
@@ -126,5 +125,6 @@ if __name__ == '__main__':
     parser.add_argument('--temperature', type=float, default=0.01)
     parser.add_argument('--max_tokens', type=int, default=512)
     parser.add_argument('--max_retries', type=int, default=3)
+    parser.add_argument('--num_threads', type=int, default=4)
     args = parser.parse_args()
     main(**args.__dict__)

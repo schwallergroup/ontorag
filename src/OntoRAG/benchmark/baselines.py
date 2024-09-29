@@ -39,7 +39,7 @@ class MedQnA_Full(dspy.Signature):
 # Modules
 class QAZeroShot(dspy.Module):
     """Simply ask a question and get an answer."""
-    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+    def __init__(self, ontology: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predict = dspy.Predict(MedQnA_ZeroShot)
 
@@ -50,7 +50,7 @@ class QAZeroShot(dspy.Module):
 
 class QAContext(dspy.Module):
     """Ask question, retrieve context and directly get answer."""
-    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+    def __init__(self, ontology: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Context)
         self.rm = dspy.Retrieve()
@@ -68,7 +68,7 @@ class QAContext(dspy.Module):
 
 class QAReason(dspy.Module):
     """Ask question, get reasoning and answer."""
-    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+    def __init__(self, ontology: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Reason)
 
@@ -79,7 +79,7 @@ class QAReason(dspy.Module):
 
 class QAFull(dspy.Module):
     """Ask question, quert context, get reasoning and answer."""
-    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+    def __init__(self, ontology: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Full)
         self.rm = dspy.Retriever()
@@ -98,7 +98,7 @@ class QAFull(dspy.Module):
 # TODO Implement a twostep method with no ontology context, for control
 class QATwoStep(dspy.Module):
     """Ask question, get reasoning and answer in two steps."""
-    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+    def __init__(self, ontology: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Reason)
 
