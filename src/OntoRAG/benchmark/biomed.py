@@ -3,6 +3,7 @@
 import os
 import pandas as pd
 from orag import *
+from baselines import *
 import dspy
 from dotenv import load_dotenv
 from contextlib import contextmanager
@@ -19,6 +20,10 @@ answer_col = {
 METHODS = {
     'ontorag-simple': SimpleORAG,
     'ontorag-hypo_ans': HyQORAG,
+    'rag-zeroshot': QAZeroShot,
+    'rag-context': QAContext,
+    'rag-reason': QAReason,
+    'rag-full': QAFull,
 }
 
 
@@ -60,9 +65,13 @@ def orag_wrap_series(orag):
         return pd.Series(dict(results=results, context=context))
     return wrapper
 
-def run_benchmark(orag, df, df_name):
-    model_ans = df['qprompt'].apply(orag_wrap_series(orag))
-    df['reasoning'] = model_ans['results'].apply(lambda x: x['reasoning'])
+def run_benchmark(rag: dspy.Module, df, df_name):
+    model_ans = df['qprompt'].apply(orag_wrap_series(rag))
+
+    if 'reasoning' in model_ans['results'][0]:
+        df['reasoning'] = model_ans['results'].apply(lambda x: x['reasoning'])
+    else:
+        df['reasoning'] = None
     df['raw_model_ans'] = model_ans['results'].apply(lambda x: x['choice_answer'])
     df['context_used'] = model_ans['context']
     df['model_answer'] = df['raw_model_ans'].apply(lambda x: clean_model_answer(x))
@@ -86,18 +95,16 @@ def log_results(df, name, acc, run):
     run.log({f'accuracy_{name}': acc})
     run.log({f'results_{name}': table})
 
-def run_one_method(method, ontology_path, llm, **kwargs):
-    orag = METHODS[method](ontology_path=ontology_path, context='')
-    dfs = load_biomed_benchmarks()
-
+def run_one_method(method, ontology_path, llm, dfs, **kwargs):
     with wandb_config(config=dict(
         method='ontorag-simple',
         ontology_path=ontology_path,
         llm=llm,
         **kwargs
     )) as run:
+        orag = METHODS[method](ontology_path=ontology_path, context='')
         for name, df in dfs.items():
-            df = df.head(5) # For testing
+            df = df.head(2) # For testing
             df, acc = run_benchmark(orag, df, name)
             log_results(df, name, acc, run)
 
@@ -108,11 +115,12 @@ def main(
         **kwargs
     ):
     init_dspy(llm = llm, **kwargs)
+    dfs = load_biomed_benchmarks()
     if method == 'all':
         for method in METHODS.keys():
-            run_one_method(method, ontology_path, llm, **kwargs)
+            run_one_method(method, ontology_path, llm, dfs, **kwargs)
     elif method in METHODS:
-        run_one_method(method, ontology_path, llm, **kwargs)
+        run_one_method(method, ontology_path, llm, dfs, **kwargs)
     else:
         raise ValueError(f"Method {method} not found.")
 
