@@ -28,14 +28,15 @@ run_benchmark() {
     if [[ $llm == *"mistral"* ]]; then
         num_threads=4
     else
-        num_threads=16
+        num_threads=12
     fi
+    # Meditron uses T=0.8 for all evals in all llms
     python src/OntoRAG/benchmark/biomed.py \
         --method all \
         --ontology_path data/ontologies/SNOMED \
         --llm "$llm" \
-        --temperature 0.8 \  # Meditron uses this
-        --max_tokens 512
+        --temperature 0.8 \
+        --max_tokens 512 \
         --num_threads "$num_threads"
     echo "Finished benchmarks for LLM: $llm"
     echo "----------------------------------------"
