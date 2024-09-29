@@ -6,7 +6,6 @@ from orag import *
 from baselines import *
 import dspy
 from dotenv import load_dotenv
-from contextlib import contextmanager
 import argparse
 import wandb
 from dspy.evaluate import Evaluate
@@ -26,10 +25,11 @@ METHODS = {
 
 def init_dspy(llm: str = 'gpt-4-turbo', **kwargs):
     load_dotenv()
-    llm = dspy.OpenAI(
+    llm = dspy.LM(
         model=llm,
         temperature=kwargs.get('temperature', 0.5),
         max_tokens=kwargs.get('max_tokens', 512),
+        max_retries=kwargs.get('max_retries', 3),
     )
     # TODO Setup retrieval model
     rm = lambda x, k : [""] * k
@@ -58,6 +58,13 @@ def clean_model_answer(model_out):
                 return model_out.split(":")[0]
     return None
 
+def compile_results(results):
+    """If model failed to answer, fill with empty prediction."""
+    empty = dspy.Prediction(reasoning='', choice_answer='')
+    cresults = [r if not isinstance(r[1], dict) else (r[0], empty) for r in results]
+    table = [{**s.toDict()} for r in cresults for s in r[:2]]
+    return table
+
 def acc_metric_clean(gt, pred, trace=None):
     """Clean answer and compare with groundtruth."""
     return gt.answer == clean_model_answer(pred.choice_answer)
@@ -73,29 +80,21 @@ def run_benchmark(rag: dspy.Module, df, run):
     )
 
     acc, results = evaluate_program(rag, return_outputs=True)
-    ans = [{**s.toDict()} for r in results for s in r[:2]]
-
-    table = wandb.Table(dataframe=pd.DataFrame(ans))
+    table = compile_results(results)
+    table = wandb.Table(dataframe=pd.DataFrame(table))
     run.log({f'accuracy_{df.name}': acc})
     run.log({f'results_{df.name}': table})
 
-@contextmanager
-def wandb_config(config: dict = None):
-    try:
-        with wandb.init(project='OntoRAG-biomed', config=config) as run:
-            if config:
-                wandb.config.update(config)
-            yield run
-    finally:
-        pass
-
 def run_one_method(method, ontology, llm, dfs, **kwargs):
-    with wandb_config(config=dict(
-        method=method,
-        ontology_path=ontology.fpath if isinstance(ontology, OntoRetriever) else ontology,
-        llm=llm,
-        **kwargs
-    )) as run:
+    with wandb.init(
+        project='OntoRAG-biomed',
+        config=dict(
+            method=method,
+            ontology_path=ontology.fpath if isinstance(ontology, OntoRetriever) else ontology,
+            llm=llm,
+            **kwargs
+        )
+    ) as run:
         orag = METHODS[method](ontology=ontology, context='')
         for df in dfs.values():
             run_benchmark(orag, df, run)
@@ -123,8 +122,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--method', type=str, default='ontorag-simple', choices=['all', *METHODS.keys()])
     parser.add_argument('--ontology_path', type=str, default='data/test/ontologies/SNOMED')
-    parser.add_argument('--llm', type=str, default='gpt-4-turbo')
-    parser.add_argument('--temperature', type=float, default=0.05)
+    parser.add_argument('--llm', type=str, default='anthropic/claude-3-5-sonnet-20240620')
+    parser.add_argument('--temperature', type=float, default=0.01)
     parser.add_argument('--max_tokens', type=int, default=512)
+    parser.add_argument('--max_retries', type=int, default=3)
     args = parser.parse_args()
     main(**args.__dict__)
