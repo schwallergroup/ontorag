@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import dspy
 from typing import Tuple, Optional
 
-__all__ = ['QAZeroShot', 'QAContext', 'QAReason', 'QAFull']
+__all__ = ['QAZeroShot', 'QAContext', 'QAReason', 'QAFull', 'QATwoStep']
 
 qprompt = "Here is the question you need to answer:"
 choice_prompt = "Answer to the question. Only one character."
@@ -43,8 +43,8 @@ class QAZeroShot(dspy.Module):
         super().__init__()
         self.predict = dspy.Predict(MedQnA_ZeroShot)
 
-    def forward(self, query: str) -> Tuple[MedQnA_ZeroShot, str]:
-        answer = self.predict(question=query)
+    def forward(self, qprompt: str) -> Tuple[MedQnA_ZeroShot, str]:
+        answer = self.predict(question=qprompt)
         return answer, None
 
 class QAContext(dspy.Module):
@@ -52,12 +52,17 @@ class QAContext(dspy.Module):
     def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Context)
-        self.retriever = dspy.Retriever()
+        self.rm = dspy.Retrieve()
 
-    def forward(self, query: str) -> Tuple[MedQnA_Context, str]:
-        context = self.retrieve(query)
-        answer = self.predictor(question=query, context=context)
+    def forward(self, qprompt: str) -> Tuple[MedQnA_Context, str]:
+        context = self.retrieve(qprompt)
+        answer = self.predictor(question=qprompt, context=context)
         return answer, context
+
+    def retrieve(self, qprompt: str) -> str:
+        """Update this with real retrieval."""
+        passages = self.rm(qprompt).passages
+        return "\n".join(passages)
 
 class QAReason(dspy.Module):
     """Ask question, get reasoning and answer."""
@@ -65,8 +70,8 @@ class QAReason(dspy.Module):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Reason)
 
-    def forward(self, query: str) -> Tuple[MedQnA_Reason, str]:
-        answer = self.predictor(question=query)
+    def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
+        answer = self.predictor(question=qprompt)
         return answer, None
 
 class QAFull(dspy.Module):
@@ -74,13 +79,29 @@ class QAFull(dspy.Module):
     def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA_Full)
-        self.retriever = dspy.Retriever()
+        self.rm = dspy.Retriever()
 
-    def forward(self, query: str) -> Tuple[MedQnA_Full, str]:
-        context = self.retrieve(query)
-        answer = self.predictor(question=query, context=context)
+    def forward(self, qprompt: str) -> Tuple[MedQnA_Full, str]:
+        context = self.retrieve(qprompt)
+        answer = self.predictor(question=qprompt, context=context)
         return answer, context
 
+    def retrieve(self, qprompt: str) -> str:
+        """Update this with real retrieval."""
+        passages = self.rm(qprompt).passages
+        return "\n".join(passages)
+
+# TODO Implement a twostep method with no ontology context, for control
+class QATwoStep(dspy.Module):
+    """Ask question, get reasoning and answer in two steps."""
+    def __init__(self, ontology_path: Optional[str] = None, context: Optional[str] = None):
+        super().__init__()
+        self.predictor = dspy.Predict(MedQnA_Reason)
+
+    def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
+        answer0 = self.predictor(question=qprompt)
+        answer = self.predictor(question=answer0.reasoning + answer0.choice_answer)
+        return answer, None
 
 if __name__ == '__main__':
     load_dotenv()

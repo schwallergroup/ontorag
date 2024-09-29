@@ -9,14 +9,11 @@ from dotenv import load_dotenv
 from contextlib import contextmanager
 import argparse
 import wandb
+from dspy.evaluate import Evaluate
+from csvdatasets import CSVDataset
 
 
-answer_col = {
-    "mmlumed": lambda x: x['answer'],
-    "medqa": lambda x: x['answer_idx'],
-    "medmcqa": lambda x: x['answer'].replace({i+1:v for i,v in enumerate(['A', 'B', 'C', 'D'])}),
-}
-
+NUM_THREADS = 4
 METHODS = {
     'ontorag-simple': SimpleORAG,
     'ontorag-hypo_ans': HyQORAG,
@@ -26,7 +23,6 @@ METHODS = {
     'rag-full': QAFull,
 }
 
-
 def init_dspy(llm: str = 'gpt-4-turbo', **kwargs):
     load_dotenv()
     llm = dspy.OpenAI(
@@ -34,14 +30,17 @@ def init_dspy(llm: str = 'gpt-4-turbo', **kwargs):
         temperature=kwargs.get('temperature', 0.5),
         max_tokens=kwargs.get('max_tokens', 512),
     )
-    dspy.settings.configure(lm=llm)
+    # TODO Setup retrieval model
+    rm = lambda x, k : [""] * k
+    dspy.settings.configure(lm=llm, rm=rm)
 
 def load_biomed_benchmarks():
     fpath = 'data/benchmarks/biomedical/'
     dfs = {}
     for fname in os.listdir(fpath):
         if fname.endswith('.csv') and not fname.startswith('.'):
-            dfs[fname.strip('_qs.csv')] = pd.read_csv(fpath + fname)
+            name = fname.strip('_qs.csv')
+            dfs[name] = CSVDataset(fpath + fname, name, input_keys=['qprompt'])
     return dfs
 
 def clean_model_answer(model_out):
@@ -58,26 +57,26 @@ def clean_model_answer(model_out):
                 return model_out.split(":")[0]
     return None
 
-def orag_wrap_series(orag):
-    """Wrap calls to dspy modules into a pandas series."""
-    def wrapper(x):
-        results, context = orag(x)
-        return pd.Series(dict(results=results, context=context))
-    return wrapper
+def acc_metric_clean(gt, pred, trace=None):
+    """Clean answer and compare with groundtruth."""
+    return gt.answer == clean_model_answer(pred.choice_answer)
 
-def run_benchmark(rag: dspy.Module, df, df_name):
-    model_ans = df['qprompt'].apply(orag_wrap_series(rag))
+def run_benchmark(rag: dspy.Module, df, run):
+    """Evaluate the method 'rag' on a dataset 'df'."""
+    evaluate_program = Evaluate(
+        devset=df.dev,
+        metric=acc_metric_clean,
+        num_threads=NUM_THREADS,
+        display_progress=True,
+        provide_traceback=True,
+    )
 
-    if 'reasoning' in model_ans['results'][0]:
-        df['reasoning'] = model_ans['results'].apply(lambda x: x['reasoning'])
-    else:
-        df['reasoning'] = None
-    df['raw_model_ans'] = model_ans['results'].apply(lambda x: x['choice_answer'])
-    df['context_used'] = model_ans['context']
-    df['model_answer'] = df['raw_model_ans'].apply(lambda x: clean_model_answer(x))
+    acc, results = evaluate_program(rag, return_outputs=True)
+    ans = [{**s.toDict()} for r in results for s in r[:2]]
 
-    acc = (df['model_answer'] == answer_col[df_name](df)).mean()
-    return df, acc
+    table = wandb.Table(dataframe=pd.DataFrame(ans))
+    run.log({f'accuracy_{df.name}': acc})
+    run.log({f'results_{df.name}': table})
 
 @contextmanager
 def wandb_config(config: dict = None):
@@ -89,24 +88,16 @@ def wandb_config(config: dict = None):
     finally:
         pass
 
-def log_results(df, name, acc, run):
-    df['gt_ans'] = answer_col[name](df)
-    table = wandb.Table(dataframe=df[['qprompt', 'reasoning', 'gt_ans', 'model_answer', 'context_used']])
-    run.log({f'accuracy_{name}': acc})
-    run.log({f'results_{name}': table})
-
 def run_one_method(method, ontology_path, llm, dfs, **kwargs):
     with wandb_config(config=dict(
-        method='ontorag-simple',
+        method=method,
         ontology_path=ontology_path,
         llm=llm,
         **kwargs
     )) as run:
         orag = METHODS[method](ontology_path=ontology_path, context='')
-        for name, df in dfs.items():
-            df = df.head(2) # For testing
-            df, acc = run_benchmark(orag, df, name)
-            log_results(df, name, acc, run)
+        for df in dfs.values():
+            run_benchmark(orag, df, run)
 
 def main(
         method: str = 'ontorag-simple',
@@ -127,10 +118,10 @@ def main(
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--method', type=str, default='all', choices=['all', 'ontorag-simple', 'ontorag-hypo_ans'])
+    parser.add_argument('--method', type=str, default='ontorag-simple', choices=['all', *METHODS.keys()])
     parser.add_argument('--ontology_path', type=str, default='data/test/ontologies/SNOMED')
     parser.add_argument('--llm', type=str, default='gpt-4-turbo')
-    parser.add_argument('--temperature', type=float, default=0.5)
+    parser.add_argument('--temperature', type=float, default=0.05)
     parser.add_argument('--max_tokens', type=int, default=512)
     args = parser.parse_args()
     main(**args.__dict__)
