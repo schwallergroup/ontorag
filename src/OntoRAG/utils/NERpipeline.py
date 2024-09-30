@@ -40,14 +40,18 @@ class OntologyNER:
                 onto_name = filename[:-4]
                 onto_path = os.path.join(self.ontology_folder, filename)
                 onto = owlready2.get_ontology(onto_path).load()
-                ontologies[onto_name] = onto
+                ontologies[onto_name] = {
+                    'ontology' : onto,
+                    'properties': self.get_properties(onto)
+                }
                 if self.debug:
                     print(f"Loaded ontology: {onto_name}")
         return ontologies
 
     def create_combined_matcher(self):
         """Create a matcher for all ontologies."""
-        for onto_name, onto in self.ontologies.items():
+        for onto_name, ontops in self.ontologies.items():
+            onto, props = ontops['ontology'], ontops['properties']
             patterns = []
             for entity in onto.classes():
                 if entity.label:
@@ -88,12 +92,43 @@ class OntologyNER:
 
         return {k: list(v) for k, v in recognized_concepts.items()}
 
+    def get_properties(self, onto):
+        """Retrieve the definition of a concept in an ontology."""
+
+        def get_first_value(annotation):
+            if annotation:
+                value = annotation.first()
+                return str(value) if value is not None else "Not available"
+            return "Not available"
+
+        def collect_props_cls(cls):
+            label_property = "http://www.w3.org/2000/01/rdf-schema#label"
+            definition_property = "http://purl.obolibrary.org/obo/IAO_0000115"
+            comment_property = "http://purl.obolibrary.org/obo/IAO_0000116"
+
+            label = get_first_value(cls.label)
+            definition = get_first_value(cls.IAO_0000115)
+            comment = get_first_value(cls.IAO_0000116)
+            return {
+                "label": label,
+                "definition": definition,
+                "comment": comment,
+            }
+
+        properties = {}
+        for cls in onto.classes():
+            prps = collect_props_cls(cls)
+            properties[prps['label']] = prps
+
+        return properties
+
     def get_concept_lineage(self, concept, onto_name):
         """Retrieve the lineage of a concept in an ontology."""
         if concept in self.lineage_cache[onto_name]:
             return self.lineage_cache[onto_name][concept]
 
-        onto = self.ontologies[onto_name]
+        onto = self.ontologies[onto_name]['ontology']
+        prps = self.ontologies[onto_name]['properties']
         cls = onto.search_one(label=concept)
 
         if not cls:
@@ -103,10 +138,10 @@ class OntologyNER:
                 )
             return None
 
-        superclasses = [c.label.first() for c in cls.ancestors() if c != cls]
-        subclasses = [c.label.first() for c in cls.subclasses()]
+        superclasses = [str(c.label.first()) for c in cls.ancestors() if c != cls if c.label.first() is not None]
+        subclasses = [str(c.label.first()) for c in cls.subclasses() if c.label.first() is not None]
 
-        lineage = {"parents": superclasses, "children": subclasses}
+        lineage = {**prps[concept], "parents": superclasses, "children": subclasses}
         self.lineage_cache[onto_name][concept] = lineage
         return lineage
 
@@ -120,3 +155,9 @@ class OntologyNER:
         for cls in onto.classes():
             if cls.label:
                 print(f"  - {cls.label}")
+
+
+if __name__ == "__main__":
+    oret = OntologyNER(ontology_folder="data/test/ontologies/SNOMED", debug=True)
+    q = oret.process_statement("This is a health care encounter")
+    print(json.dumps(q, indent=2))
