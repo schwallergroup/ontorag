@@ -68,7 +68,7 @@ def compile_results(results):
     cresults = [
         r if not isinstance(r[1], dict) else (r[0], empty) for r in results
     ]
-    table = [{**s.toDict()} for r in cresults for s in r[:2]]
+    table = [{**r[0].toDict(), **r[1].toDict()} for r in cresults]
     return table
 
 
@@ -84,7 +84,6 @@ def run_benchmark(rag: dspy.Module, df, run, num_threads=4):
         metric=acc_metric_clean,
         num_threads=num_threads,
         display_progress=True,
-        # provide_traceback=True,
     )
 
     acc, results = evaluate_program(rag, return_outputs=True)
