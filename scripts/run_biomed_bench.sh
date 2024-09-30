@@ -1,24 +1,14 @@
 #!/bin/bash
-#!/bin/bash
 
 llms=(
-    "anthropic/claude-3-5-sonnet-20240620"
-    "anthropic/claude-3-sonnet-20240229"
-    "openai/gpt-4o"
+    # "anthropic/claude-3-5-sonnet-20240620"
+    # "anthropic/claude-3-sonnet-20240229"
+    # "openai/gpt-4o"
     "openai/gpt-4o-mini"
     # "groq/llama-3.1-70b-versatile"
-    "mistral/mistral-medium-latest"
+    # "mistral/mistral-medium-latest"
     # "openai/gpt-3.5-turbo"
     # "openai/gpt-4-turbo-preview"
-)
-
-methods=(
-    "rag-zeroshot"
-    "ontorag-simple"
-    "ontorag-hypo_ans"
-    "rag-context"
-    "rag-reason"
-    "rag-full"
 )
 
 run_benchmark() {
@@ -35,7 +25,7 @@ run_benchmark() {
         --method all \
         --ontology_path data/ontologies/SNOMED \
         --llm "$llm" \
-        --temperature 0.8 \
+        --temperature 0.01 \
         --max_tokens 512 \
         --num_threads "$num_threads"
     echo "Finished benchmarks for LLM: $llm"

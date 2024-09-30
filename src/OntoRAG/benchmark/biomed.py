@@ -9,16 +9,18 @@ from baselines import QAContext, QAFull, QAReason, QAZeroShot
 from csvdatasets import CSVDataset
 from dotenv import load_dotenv
 from dspy.evaluate import Evaluate
-from orag import HyQORAG, SimpleORAG
+from orag import HyQOntoRAGTM, HyQORAG, OntoRAGTM, SimpleORAG
 
 import wandb
 from OntoRAG.utils import OntoRetriever
 
 METHODS = {
-    "ontorag-simple": SimpleORAG,
-    "ontorag-hypo_ans": HyQORAG,
-    "rag-zeroshot": QAZeroShot,
-    "rag-reason": QAReason,
+    # "ontorag-simple": SimpleORAG,
+    # "ontorag-hypo_ans": HyQORAG,
+    # "ontorag-tm": OntoRAGTM,
+    "ontorag-hypo_ans-tm": HyQOntoRAGTM,
+    # "rag-zeroshot": QAZeroShot,
+    # "rag-reason": QAReason,
     # 'rag-context': QAContext,
     # 'rag-full': QAFull,
 }
@@ -31,6 +33,7 @@ def _init_dspy(llm: str = "gpt-4-turbo", **kwargs):
         temperature=kwargs.get("temperature", 0.5),
         max_tokens=kwargs.get("max_tokens", 512),
         max_retries=kwargs.get("max_retries", 3),
+        timeout=kwargs.get("timeout", 60),
     )
     # TODO Setup retrieval model
     rm = lambda x, k: [""] * k
