@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
 
-__all__ = ["SimpleORAG", "HyQORAG"]
+__all__ = ["SimpleORAG", "HyQORAG", "OntoRAGTM", "HyQOntoRAGTM"]
 
 
 class MedQnA(dspy.Signature):
@@ -25,8 +25,18 @@ class MedQnA(dspy.Signature):
         desc="Answer to the question. Only one character."
     )
 
+class OntoTranslate(dspy.Signature):
+    """Summarize the raw retrieved ontological context into a readable format. Select the most relevant information for the question."""
 
-# Implement multiple methods/variations of OntoRAG
+    question: str = dspy.InputField(
+        desc="Question to be answered."
+    )
+    ontological_context: str = dspy.InputField(
+        desc="Here is the ontology context."
+    )
+    summarized_context: str = dspy.OutputField(
+        desc="Important facts from the retrieved ontology context."
+    )
 
 
 class SimpleORAG(BaseOntoRAG):
@@ -79,6 +89,71 @@ class HyQORAG(BaseOntoRAG):
         answer = self.final_predictor(question=qprompt, context=ctxt1)
 
         answer.context = ctxt1
+        return answer
+
+
+class OntoRAGTM(BaseOntoRAG):
+    """OntoRAG with translate module.
+    Preprocess retrieved context with LLM, then generate answer."""
+
+    def __init__(
+        self,
+        ontology: Union[str, OntoRetriever],
+        context: Optional[str] = None,
+    ):
+        super().__init__()
+        self.hypot_answer = dspy.Predict(MedQnA)
+        self.final_predictor = dspy.Predict(MedQnA)
+        self.translator = dspy.Predict(OntoTranslate)
+        if isinstance(ontology, str):
+            self.ontoretriever = OntoRetriever(ontology_path=ontology)
+        else:
+            self.ontoretriever = ontology
+
+    # docstr-coverage:inherited
+    def forward(self, qprompt: str) -> MedQnA:
+        # Generate hypothetical answer
+        octxt = self.retrieve(qprompt)
+        tctxt = self.translator(ontological_context=octxt)
+        answer = self.final_predictor(question=qprompt, context=tctxt)
+
+        answer.context = octxt
+        answer.translated_context = tctxt
+        return answer
+
+
+class HyQOntoRAGTM(BaseOntoRAG):
+    """OntoRAG with translate module, with hypothetical answer.
+    Preprocess retrieved context with LLM, then generate answer."""
+
+    def __init__(
+        self,
+        ontology: Union[str, OntoRetriever],
+        context: Optional[str] = None,
+    ):
+        super().__init__()
+        self.hypot_answer = dspy.Predict(MedQnA)
+        self.final_predictor = dspy.Predict(MedQnA)
+        self.translator = dspy.Predict(OntoTranslate)
+        if isinstance(ontology, str):
+            self.ontoretriever = OntoRetriever(ontology_path=ontology)
+        else:
+            self.ontoretriever = ontology
+
+    # docstr-coverage:inherited
+    def forward(self, qprompt: str) -> MedQnA:
+        # Generate hypothetical answer
+        octxt0 = self.retrieve(qprompt)
+        tctxt = self.translator(ontological_context=octxt0)
+        hans = self.hypot_answer(question=qprompt, context=tctxt)
+
+        # Query concepts in hypothetical answer
+        octxt1 = self.retrieve(hans.reasoning + hans.choice_answer)
+        tctxt = self.translator(ontological_context=octxt1)
+        answer = self.final_predictor(question=qprompt, context=tctxt)
+
+        answer.context = octxt1
+        answer.translated_context = tctxt
         return answer
 
 

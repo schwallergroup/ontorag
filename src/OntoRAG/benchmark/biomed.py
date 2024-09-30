@@ -9,16 +9,18 @@ from baselines import QAContext, QAFull, QAReason, QAZeroShot
 from csvdatasets import CSVDataset
 from dotenv import load_dotenv
 from dspy.evaluate import Evaluate
-from orag import HyQORAG, SimpleORAG
+from orag import HyQORAG, SimpleORAG, OntoRAGTM, HyQOntoRAGTM
 
 import wandb
 from OntoRAG.utils import OntoRetriever
 
 METHODS = {
-    "ontorag-simple": SimpleORAG,
-    "ontorag-hypo_ans": HyQORAG,
-    "rag-zeroshot": QAZeroShot,
-    "rag-reason": QAReason,
+    # "ontorag-simple": SimpleORAG,
+    # "ontorag-hypo_ans": HyQORAG,
+    "ontorag-tm": OntoRAGTM,
+    "ontorag-hypo_ans-tm": HyQOntoRAGTM,
+    # "rag-zeroshot": QAZeroShot,
+    # "rag-reason": QAReason,
     # 'rag-context': QAContext,
     # 'rag-full': QAFull,
 }
