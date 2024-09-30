@@ -114,7 +114,7 @@ class OntoRAGTM(BaseOntoRAG):
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt = self.retrieve(qprompt)
-        tctxt = self.translator(ontological_context=octxt)
+        tctxt = self.translator(question=qprompt, ontological_context=octxt).summarized_context
         answer = self.final_predictor(question=qprompt, context=tctxt)
 
         answer.context = octxt
@@ -144,12 +144,12 @@ class HyQOntoRAGTM(BaseOntoRAG):
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt0 = self.retrieve(qprompt)
-        tctxt = self.translator(ontological_context=octxt0)
+        tctxt = self.translator(question=qprompt, ontological_context=octxt0).summarized_context
         hans = self.hypot_answer(question=qprompt, context=tctxt)
 
         # Query concepts in hypothetical answer
         octxt1 = self.retrieve(hans.reasoning + hans.choice_answer)
-        tctxt = self.translator(ontological_context=octxt1)
+        tctxt = self.translator(ontological_context=octxt1).summarized_context
         answer = self.final_predictor(question=qprompt, context=tctxt)
 
         answer.context = octxt1
