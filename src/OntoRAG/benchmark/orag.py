@@ -25,17 +25,16 @@ class MedQnA(dspy.Signature):
         desc="Answer to the question. Only one character."
     )
 
+
 class OntoTranslate(dspy.Signature):
     """Summarize the raw retrieved ontological context into a readable format. Select the most relevant information for the question."""
 
-    question: str = dspy.InputField(
-        desc="Question to be answered."
-    )
+    question: str = dspy.InputField(desc="Question to be answered.")
     ontological_context: str = dspy.InputField(
         desc="Here is the ontology context."
     )
     summarized_context: str = dspy.OutputField(
-        desc="Important facts from the retrieved ontology context."
+        desc="Provide a detailed analysis of the provided ontological context that is relevant to the question. Be as detailed as necessary."
     )
 
 
@@ -114,7 +113,9 @@ class OntoRAGTM(BaseOntoRAG):
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt = self.retrieve(qprompt)
-        tctxt = self.translator(ontological_context=octxt)
+        tctxt = self.translator(
+            question=qprompt, ontological_context=octxt
+        ).summarized_context
         answer = self.final_predictor(question=qprompt, context=tctxt)
 
         answer.context = octxt
@@ -144,12 +145,16 @@ class HyQOntoRAGTM(BaseOntoRAG):
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt0 = self.retrieve(qprompt)
-        tctxt = self.translator(ontological_context=octxt0)
+        tctxt = self.translator(
+            question=qprompt, ontological_context=octxt0
+        ).summarized_context
         hans = self.hypot_answer(question=qprompt, context=tctxt)
 
         # Query concepts in hypothetical answer
         octxt1 = self.retrieve(hans.reasoning + hans.choice_answer)
-        tctxt = self.translator(ontological_context=octxt1)
+        tctxt = self.translator(
+            question=qprompt, ontological_context=octxt1
+        ).summarized_context
         answer = self.final_predictor(question=qprompt, context=tctxt)
 
         answer.context = octxt1
