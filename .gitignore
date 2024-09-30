@@ -902,3 +902,5 @@ scratch/
 data/*
 wandb/*
 .vscode
+notebooks/data/*
+notebooks/wandb/*
