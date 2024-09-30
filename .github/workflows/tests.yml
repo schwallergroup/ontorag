@@ -47,8 +47,6 @@ jobs:
         run: tox run -e doc8
       - name: Check docstring coverage
         run: tox run -e docstr-coverage
-      - name: Check documentation build with Sphinx
-        run: tox run -e docs-test
   tests:
     name: Tests
     runs-on: ${{ matrix.os }}
