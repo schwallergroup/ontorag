@@ -1,15 +1,16 @@
 """Convert OntoGen output to OWL format."""
 
-from tree import Tree
 import pickle
+import re
+
 import owlready2
 from owlready2 import Thing, types
 from pydantic import BaseModel
-import re
+from tree import Tree
 
 
 class OntoGen2Owl(BaseModel):
-    def __call__(self, relationships, output_file='output_ontology.owl'):
+    def __call__(self, relationships, output_file="output_ontology.owl"):
 
         onto = self.create_ontology_from_relationships(relationships)
 
@@ -17,7 +18,9 @@ class OntoGen2Owl(BaseModel):
         for cls in onto.classes():
             print(f"- {cls}")
             if cls.is_a:
-                print(f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}")
+                print(
+                    f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}"
+                )
 
         onto.save(file=output_file, format="rdfxml")
         print(f"\nOntology saved to '{output_file}'")
@@ -30,23 +33,31 @@ class OntoGen2Owl(BaseModel):
         for cls in loaded_onto.classes():
             print(f"- {cls}")
             if cls.is_a:
-                print(f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}")
+                print(
+                    f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}"
+                )
 
-        print(f"\nNumber of classes in reloaded ontology: {len(list(loaded_onto.classes()))}")
+        print(
+            f"\nNumber of classes in reloaded ontology: {len(list(loaded_onto.classes()))}"
+        )
 
         return onto, loaded_onto
 
     def clean_class_name(self, name):
-        words = re.findall(r'\w+', name)
-        return ''.join(word.capitalize() for word in words)
+        """Clean the class name."""
+        words = re.findall(r"\w+", name)
+        return "".join(word.capitalize() for word in words)
 
     def create_ontology_from_relationships(self, relationships):
+        """Create an ontology from the relationships."""
         onto = owlready2.get_ontology("http://example.org/example.owl")
 
         with onto:
-            for relationship in str(relationships).split('\n'):
+            for relationship in str(relationships).split("\n"):
                 try:
-                    subclass, superclass = map(str.strip, relationship.split('isA'))
+                    subclass, superclass = map(
+                        str.strip, relationship.split("isA")
+                    )
                     subclass_name = self.clean_class_name(subclass)
                     superclass_name = self.clean_class_name(superclass)
 
@@ -66,10 +77,10 @@ class OntoGen2Owl(BaseModel):
 
 if __name__ == "__main__":
     transf = OntoGen2Owl()
-    fpath = 'data/ontologies/sacs_llama3.1:70b/'
+    fpath = "data/ontologies/sacs_llama3.1:70b/"
     wmap_file = "wordmap_0.pkl"
 
-    with open(fpath + wmap_file, "rb") as f: 
-        tree = pickle.load(f)["Thing"] 
+    with open(fpath + wmap_file, "rb") as f:
+        tree = pickle.load(f)["Thing"]
 
-    transf(tree, output_file = fpath + "output_ontology_0.owl")
+    transf(tree, output_file=fpath + "output_ontology_0.owl")

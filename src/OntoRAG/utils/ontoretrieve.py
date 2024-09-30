@@ -1,9 +1,12 @@
 """Ontology retrieval module."""
 
 import json
+from typing import Dict, List, Optional
+
 import dspy
-from typing import Optional
+
 from .NERpipeline import OntologyNER
+
 
 class OntoRetriever(dspy.Module):
     """Ontology retrieval module."""
@@ -18,8 +21,7 @@ class OntoRetriever(dspy.Module):
         self.fpath = ontology_path
         self.ontology = OntologyNER(ontology_folder=ontology_path)
 
-
-    def forward(self, query: str, context: Optional[str] = None) -> str:
+    def forward(self, query: str, context: Optional[str] = None) -> List[Dict]:
         """Retrieve ontology context."""
 
         onto_json = self.ontology.process_statement(query)

@@ -1,9 +1,11 @@
-import os
 import json
-import owlready2
-from spacy.matcher import PhraseMatcher
-import spacy
+import os
 from collections import defaultdict
+
+import owlready2
+import spacy
+from spacy.matcher import PhraseMatcher
+
 
 class OntologyNER:
     def __init__(self, ontology_folder, debug=False):
@@ -17,14 +19,12 @@ class OntologyNER:
         self.lineage_cache = defaultdict(dict)
 
     def process_statement(self, statement):
+        """Retrieve ontology concepts from a statement."""
         recognized_concepts = self.recognize_concepts(statement)
-        
+
         output = {}
         for onto_name, concepts in recognized_concepts.items():
-            output[onto_name] = {
-                "concepts": concepts,
-                "terms": {}
-            }
+            output[onto_name] = {"concepts": concepts, "terms": {}}
             for concept in concepts:
                 lineage = self.get_concept_lineage(concept, onto_name)
                 if lineage:
@@ -33,6 +33,7 @@ class OntologyNER:
         return output
 
     def load_ontologies(self):
+        """Load all ontologies from the specified folder."""
         ontologies = {}
         for filename in os.listdir(self.ontology_folder):
             if filename.endswith(".owl"):
@@ -45,6 +46,7 @@ class OntologyNER:
         return ontologies
 
     def create_combined_matcher(self):
+        """Create a matcher for all ontologies."""
         for onto_name, onto in self.ontologies.items():
             patterns = []
             for entity in onto.classes():
@@ -54,36 +56,40 @@ class OntologyNER:
                         patterns.append(self.nlp(concept))
                         self.concept_to_ontology[concept] = onto_name
                         # Add singular/plural variations
-                        if concept.endswith('s'):
+                        if concept.endswith("s"):
                             singular = concept[:-1]
                             patterns.append(self.nlp(singular))
                             self.concept_to_ontology[singular] = onto_name
                         else:
-                            plural = concept + 's'
+                            plural = concept + "s"
                             patterns.append(self.nlp(plural))
                             self.concept_to_ontology[plural] = onto_name
             self.combined_matcher.add(onto_name, patterns)
             if self.debug:
-                print(f"Added {len(patterns)} patterns for ontology: {onto_name}")
+                print(
+                    f"Added {len(patterns)} patterns for ontology: {onto_name}"
+                )
 
     def recognize_concepts(self, text):
+        """Recognize ontology concepts in a text."""
         doc = self.nlp(text.lower())
         matches = self.combined_matcher(doc)
-        
+
         recognized_concepts = defaultdict(set)
         for match_id, start, end in matches:
             onto_name = self.nlp.vocab.strings[match_id]
             concept = doc[start:end].text
             recognized_concepts[onto_name].add(concept)
-        
+
         if self.debug:
             print(f"Recognized concepts: {dict(recognized_concepts)}")
             print(f"Tokens: {[token.text for token in doc]}")
             print(f"Matcher results: {matches}")
-        
+
         return {k: list(v) for k, v in recognized_concepts.items()}
 
     def get_concept_lineage(self, concept, onto_name):
+        """Retrieve the lineage of a concept in an ontology."""
         if concept in self.lineage_cache[onto_name]:
             return self.lineage_cache[onto_name][concept]
 
@@ -92,20 +98,20 @@ class OntologyNER:
 
         if not cls:
             if self.debug:
-                print(f"Could not find class for concept: {concept} in ontology: {onto_name}")
+                print(
+                    f"Could not find class for concept: {concept} in ontology: {onto_name}"
+                )
             return None
 
         superclasses = [c.label.first() for c in cls.ancestors() if c != cls]
         subclasses = [c.label.first() for c in cls.subclasses()]
 
-        lineage = {
-            "parents": superclasses,
-            "children": subclasses
-        }
+        lineage = {"parents": superclasses, "children": subclasses}
         self.lineage_cache[onto_name][concept] = lineage
         return lineage
 
     def print_ontology_concepts(self, onto_name):
+        """Print all concepts in an ontology."""
         if onto_name not in self.ontologies:
             print(f"Ontology {onto_name} not found.")
             return
@@ -114,4 +120,3 @@ class OntologyNER:
         for cls in onto.classes():
             if cls.label:
                 print(f"  - {cls.label}")
-

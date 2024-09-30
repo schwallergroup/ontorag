@@ -1,33 +1,50 @@
 """An OntoRAG for biomedical Q&A."""
 
+from typing import Literal, Optional, Tuple, Union
+
+import dspy
+from dotenv import load_dotenv
+
 from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
-from dotenv import load_dotenv
-import dspy
-from typing import Literal, Tuple, Optional, Union
 
-__all__ = ['SimpleORAG', 'HyQORAG']
+__all__ = ["SimpleORAG", "HyQORAG"]
+
 
 class MedQnA(dspy.Signature):
     """Answer a question with a detailed response based on the given context."""
+
     context: str = dspy.InputField(desc="Here is the ontology context")
-    question: str = dspy.InputField(desc="Here is the question you need to answer")
-    reasoning: str = dspy.OutputField(desc="Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer.")
-    choice_answer: str = dspy.OutputField(desc="Answer to the question. Only one character.")
+    question: str = dspy.InputField(
+        desc="Here is the question you need to answer"
+    )
+    reasoning: str = dspy.OutputField(
+        desc="Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
+    )
+    choice_answer: str = dspy.OutputField(
+        desc="Answer to the question. Only one character."
+    )
 
 
 # Implement multiple methods/variations of OntoRAG
 
+
 class SimpleORAG(BaseOntoRAG):
     """Identify and query concepts in question, then generate answer."""
-    def __init__(self, ontology: Union[str, OntoRetriever], context: Optional[str] = None):
+
+    def __init__(
+        self,
+        ontology: Union[str, OntoRetriever],
+        context: Optional[str] = None,
+    ):
         super().__init__()
         self.predictor = dspy.Predict(MedQnA)
         if isinstance(ontology, str):
-            self.ontoretriever = OntoRetriever(ontology_path = ontology)
+            self.ontoretriever = OntoRetriever(ontology_path=ontology)
         else:
             self.ontoretriever = ontology
 
+    # docstr-coverage:inherited
     def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
@@ -37,16 +54,22 @@ class SimpleORAG(BaseOntoRAG):
 
 class HyQORAG(BaseOntoRAG):
     """Generate hypothetical answer, then query concepts in answer and reconsider response."""
-    def __init__(self, ontology: Union[str, OntoRetriever], context: Optional[str] = None):
+
+    def __init__(
+        self,
+        ontology: Union[str, OntoRetriever],
+        context: Optional[str] = None,
+    ):
         super().__init__()
         self.hypot_answer = dspy.Predict(MedQnA)
         self.final_predictor = dspy.Predict(MedQnA)
         if isinstance(ontology, str):
-            self.ontoretriever = OntoRetriever(ontology_path = ontology)
+            self.ontoretriever = OntoRetriever(ontology_path=ontology)
         else:
             self.ontoretriever = ontology
 
-    def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
+    # docstr-coverage:inherited
+    def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         ctxt0 = self.retrieve(qprompt)
         hans = self.hypot_answer(question=qprompt, context=ctxt0)
@@ -59,14 +82,14 @@ class HyQORAG(BaseOntoRAG):
         return answer
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_dotenv()
     llm = dspy.OpenAI(
         system_prompt="",
-        model='gpt-4o-mini',
+        model="gpt-4o-mini",
         max_tokens=254,
     )
     dspy.settings.configure(lm=llm)
 
-    orag = SimpleORAG(ontology_path='data/test/ontologies/SNOMED', context='')
-    print(orag.forward('What kinds of health care encounters exist?'))
+    orag = SimpleORAG(ontology="data/test/ontologies/SNOMED", context="")
+    print(orag.forward("What kinds of health care encounters exist?"))
