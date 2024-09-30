@@ -41,8 +41,8 @@ class OntologyNER:
                 onto_path = os.path.join(self.ontology_folder, filename)
                 onto = owlready2.get_ontology(onto_path).load()
                 ontologies[onto_name] = {
-                    'ontology' : onto,
-                    'properties': self.get_properties(onto)
+                    "ontology": onto,
+                    "properties": self.get_properties(onto),
                 }
                 if self.debug:
                     print(f"Loaded ontology: {onto_name}")
@@ -51,7 +51,7 @@ class OntologyNER:
     def create_combined_matcher(self):
         """Create a matcher for all ontologies."""
         for onto_name, ontops in self.ontologies.items():
-            onto, props = ontops['ontology'], ontops['properties']
+            onto, props = ontops["ontology"], ontops["properties"]
             patterns = []
             for entity in onto.classes():
                 if entity.label:
@@ -116,19 +116,21 @@ class OntologyNER:
             }
 
         properties = {}
-        for cls in onto.classes():
-            prps = collect_props_cls(cls)
-            properties[prps['label']] = prps
-
-        return properties
+        try:
+            for cls in onto.classes():
+                prps = collect_props_cls(cls)
+                properties[prps["label"]] = prps
+            return properties
+        except:
+            return {}
 
     def get_concept_lineage(self, concept, onto_name):
         """Retrieve the lineage of a concept in an ontology."""
         if concept in self.lineage_cache[onto_name]:
             return self.lineage_cache[onto_name][concept]
 
-        onto = self.ontologies[onto_name]['ontology']
-        prps = self.ontologies[onto_name]['properties']
+        onto = self.ontologies[onto_name]["ontology"]
+        prps = self.ontologies[onto_name]["properties"]
         cls = onto.search_one(label=concept)
 
         if not cls:
@@ -138,10 +140,23 @@ class OntologyNER:
                 )
             return None
 
-        superclasses = [str(c.label.first()) for c in cls.ancestors() if c != cls if c.label.first() is not None]
-        subclasses = [str(c.label.first()) for c in cls.subclasses() if c.label.first() is not None]
+        superclasses = [
+            str(c.label.first())
+            for c in cls.ancestors()
+            if c != cls
+            if c.label.first() is not None
+        ]
+        subclasses = [
+            str(c.label.first())
+            for c in cls.subclasses()
+            if c.label.first() is not None
+        ]
 
-        lineage = {**prps[concept], "parents": superclasses, "children": subclasses}
+        lineage = {
+            **prps.get(concept, {}),
+            "parents": superclasses,
+            "children": subclasses,
+        }
         self.lineage_cache[onto_name][concept] = lineage
         return lineage
 
@@ -158,6 +173,8 @@ class OntologyNER:
 
 
 if __name__ == "__main__":
-    oret = OntologyNER(ontology_folder="data/test/ontologies/SNOMED", debug=True)
+    oret = OntologyNER(
+        ontology_folder="data/test/ontologies/SNOMED", debug=True
+    )
     q = oret.process_statement("This is a health care encounter")
     print(json.dumps(q, indent=2))
