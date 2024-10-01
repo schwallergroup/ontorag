@@ -80,7 +80,7 @@ class OntoGen2Owl(BaseModel):
 
 if __name__ == "__main__":
     transf = OntoGen2Owl()
-    fpath = "/home/matt/Proj/ontorag/sacs_llama3.1:70b/" # path with the tree files 
+    fpath = "data/ontologies/sacs_claude3_5/" # path with the tree files 
     wmap_file = "wordmap_0.pkl" #wordmap to use 
     defs_file = "definitions_claude.csv" # add definitions from csv 
 
