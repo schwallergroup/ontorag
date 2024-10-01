@@ -54,20 +54,19 @@ class OntologyNER:
             onto, props = ontops["ontology"], ontops["properties"]
             patterns = []
             for entity in onto.classes():
-                if entity.label:
-                    for label in entity.label:
-                        concept = label.lower()
-                        patterns.append(self.nlp(concept))
-                        self.concept_to_ontology[concept] = onto_name
-                        # Add singular/plural variations
-                        if concept.endswith("s"):
-                            singular = concept[:-1]
-                            patterns.append(self.nlp(singular))
-                            self.concept_to_ontology[singular] = onto_name
-                        else:
-                            plural = concept + "s"
-                            patterns.append(self.nlp(plural))
-                            self.concept_to_ontology[plural] = onto_name
+                for label in entity.label:
+                    concept = label.lower()
+                    patterns.append(self.nlp(concept))
+                    self.concept_to_ontology[concept] = onto_name
+                    # Add singular/plural variations
+                    if concept.endswith("s"):
+                        singular = concept[:-1]
+                        patterns.append(self.nlp(singular))
+                        self.concept_to_ontology[singular] = onto_name
+                    else:
+                        plural = concept + "s"
+                        patterns.append(self.nlp(plural))
+                        self.concept_to_ontology[plural] = onto_name
             self.combined_matcher.add(onto_name, patterns)
             if self.debug:
                 print(
@@ -102,27 +101,26 @@ class OntologyNER:
             return "Not available"
 
         def collect_props_cls(cls):
-            label_property = "http://www.w3.org/2000/01/rdf-schema#label"
-            definition_property = "http://purl.obolibrary.org/obo/IAO_0000115"
-            comment_property = "http://purl.obolibrary.org/obo/IAO_0000116"
-
-            label = get_first_value(cls.label)
+            if not cls.label and cls.name:
+                cls.label = cls.name.lower()
+            if isinstance(cls.label, str):
+                label = cls.label
+            else:
+                label = get_first_value(cls.label)
             definition = get_first_value(cls.IAO_0000115)
-            comment = get_first_value(cls.IAO_0000116)
             return {
                 "label": label,
                 "definition": definition,
-                "comment": comment,
             }
 
+        class IAO_0000115(owlready2.AnnotationProperty):
+            namespace = onto
+
         properties = {}
-        try:
-            for cls in onto.classes():
-                prps = collect_props_cls(cls)
-                properties[prps["label"]] = prps
-            return properties
-        except:
-            return {}
+        for cls in onto.classes():
+            prps = collect_props_cls(cls)
+            properties[prps["label"]] = prps
+        return properties
 
     def get_concept_lineage(self, concept, onto_name):
         """Retrieve the lineage of a concept in an ontology."""
@@ -174,8 +172,7 @@ class OntologyNER:
 
 if __name__ == "__main__":
     oret = OntologyNER(
-        ontology_folder="data/ontologies/sacs_claude3_5", debug=True
-        # ontology_folder="data/test/ontologies/SNOMED", debug=True
+        ontology_folder="data/ontologies/sacs_claude3_5/", debug=True
     )
-    q = oret.process_statement("what is photocatalysts")
+    q = oret.process_statement("clusters are important in catalysis")
     print(json.dumps(q, indent=2))
