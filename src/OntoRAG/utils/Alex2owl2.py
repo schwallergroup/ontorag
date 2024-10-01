@@ -79,6 +79,7 @@ class OntoGen2Owl(BaseModel):
         return onto
 
 if __name__ == "__main__":
+    import os
     transf = OntoGen2Owl()
     for model in ['sacs_claude3_5', 'sacs_llama3.1:70b']:
         fpath = f"data/ontologies/{model}/" # path with the tree files 
@@ -86,8 +87,9 @@ if __name__ == "__main__":
             wmap_file = f"wordmap_{i}.pkl" #wordmap to use 
             defs_file = "definitions.csv" # add definitions from csv 
 
+            os.makedirs(fpath + f"sacs_ontology_{i}", exist_ok=True)
             transf(
                 wmap=fpath + wmap_file,
                 definitions=fpath + defs_file,
-                output_file=fpath + f"sacs_ontology_{i}.owl" # output 
+                output_file=fpath + f"sacs_ontology_{i}/sacs.owl" # output 
             )
