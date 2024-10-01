@@ -174,7 +174,8 @@ class OntologyNER:
 
 if __name__ == "__main__":
     oret = OntologyNER(
-        ontology_folder="data/test/ontologies/SNOMED", debug=True
+        ontology_folder="data/ontologies/sacs_claude3_5", debug=True
+        # ontology_folder="data/test/ontologies/SNOMED", debug=True
     )
-    q = oret.process_statement("This is a health care encounter")
+    q = oret.process_statement("what is photocatalysts")
     print(json.dumps(q, indent=2))
