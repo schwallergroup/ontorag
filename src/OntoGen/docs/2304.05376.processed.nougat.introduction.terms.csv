@@ -1,0 +1,112 @@
+Language Language Models (LLMs),25,56,1
+Task,137,141,1
+GitHub Copilot,191,205,2
+StarCoder,236,245,2
+Transformer architecture,423,447,3
+Neural machine translation,468,494,3
+Natural language processing tasks,519,552,3
+Zero-shot performance,591,612,3
+Task,727,731,4
+Chemistry operations,760,780,4
+GPT-4,805,810,5
+GPT-3.5,820,827,5
+Molecular graph,939,954,5
+Core design,1013,1024,6
+Subsequent words,1054,1070,6
+Large language models,1136,1157,7
+Dedicated external tools,1163,1187,7
+Plugins,1191,1198,7
+Calculator,1210,1220,7
+Mathematical operations,1225,1248,7
+OPSIN,1252,1257,7
+Tool,1318,1322,8
+Chemistry,1488,1497,10
+Artificial Intelligence (AI),1553,1581,10
+Reaction Prediction,1629,1648,10
+Retrosynthesis Planning,1671,1694,10
+Molecular Property Prediction,1725,1754,10
+De-novo Molecular Generation,1777,1805,10
+Materials Design,1816,1832,10
+Bayesian Optimization,1862,1883,10
+Code-generating LLMs,1958,1978,10
+Chemistry,2012,2021,10
+Automation,2213,2223,14
+Chemistry,2243,2252,14
+Experimental Nature,2330,2349,14
+Computational Tools,2419,2438,14
+Tool,2499,2503,14
+RXN for Chemistry,2558,2575,14
+AIZynthFinder,2601,2614,14
+Integrability,2678,2691,14
+Tool,2707,2711,15
+Open-source Community,2734,2755,15
+Interoperability,2847,2863,15
+Tool,2993,2997,15
+LLM-powered Chemistry Engine,3171,3199,17
+ChemCrow,3201,3209,17
+Task,3284,3288,17
+Materials Design,3320,3336,17
+ChemCrow,3352,3360,18
+Expert-designed tools,3393,3414,18
+Chemistry,3419,3428,18
+GPT-4,3463,3468,18
+Task,3526,3530,18
+Figure 1a,3567,3576,18
+Tool,3613,3617,19
+User-given prompt,3735,3752,20
+Tool,3763,3767,20
+Task,3945,3949,21
+Tool,4134,4138,22
+Tool,4182,4186,22
+Task-solving process,4215,4235,22
+Chemistry-related packages,4256,4282,23
+Tool,4306,4310,23
+Tool,4330,4334,24
+Chain-of-thought process,4433,4457,25
+Tool,4491,4495,25
+Toolsets,4613,4621,27
+ChemCrow,4637,4645,27
+ReAct,4647,4652,27
+Tool,4696,4700,27
+Tool,4745,4749,27
+ReAct,5133,5138,32
+MRKL,5147,5151,32
+Tool,5217,5221,32
+Task,5239,5243,32
+Hyperconfident,5334,5348,33
+Reasoning engine,5403,5419,33
+Task,5453,5457,33
+Tool,5480,5484,33
+Tool,5531,5535,33
+Loop,5565,5569,33
+Tool,5698,5702,34
+Task,5722,5726,34
+Chemistry,5731,5740,34
+GPT-4,5766,5771,34
+Cloud labs,5810,5820,35
+Task,5868,5872,35
+Tool,5878,5882,35
+Robotic synthesis platform,5930,5956,35
+Tool,5976,5980,36
+Reaction-specific tools,6053,6076,36
+Figure 0(b),6090,6101,36
+Section 5.3,6119,6130,36
+ChemCrow,6143,6151,36
+Reaction properties,6196,6215,36
+Task,6264,6268,36
+Physical lab,6275,6287,36
+Tool,6307,6311,37
+ChemCrow,6341,6349,37
+Tool,6426,6430,37
+ChemCrow,6508,6516,38
+Expert chemists,6543,6558,38
+Entry barrier,6593,6606,38
+Non-experts,6611,6622,38
+Simple interface,6637,6653,38
+Accurate chemical knowledge,6664,6691,38
+ChemCrow,6724,6732,39
+Use cases,6739,6748,39
+Appendix G,6754,6764,39
+Target molecules,6790,6806,39
+Safety controls,6808,6823,39
+Modes of action,6866,6881,39

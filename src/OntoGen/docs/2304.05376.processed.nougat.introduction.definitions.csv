@@ -1,0 +1,62 @@
+Materials Design,Refers to the use of artificial intelligence (AI) systems to design materials.
+Modes of action,Refers to the way molecules act or function.
+Expert-designed tools,"Tools designed by experts in a specific field, such as chemistry."
+Simple interface,A user-friendly interface that provides easy access to complex tasks.
+Task-solving process,The process of breaking down a task into smaller steps and executing them to achieve a goal.
+LLM-powered Chemistry Engine,"An engine powered by large language models (LLMs) that can perform chemical tasks, such as ChemCrow."
+AIZynthFinder,A tool used in chemistry for finding synthesis routes.
+Entry barrier,The obstacles or challenges that prevent non-experts from accessing complex knowledge or tools.
+RXN for Chemistry,A platform that facilitates the integration of various chemistry tools.
+Figure 1a,An illustration of the task-solving process using ChemCrow.
+ChemCrow,An LLM-powered chemistry engine designed to streamline chemical tasks.
+Reaction Prediction,The use of AI systems to predict the outcome of chemical reactions.
+Robotic synthesis platform,A physical lab that can execute chemical synthesis tasks autonomously.
+GPT-3.5,A version of a large language model (LLM) used in natural language processing tasks.
+Chemistry,"The field of study dealing with the composition, properties, and reactions of matter."
+GitHub Copilot,A tool introduced in 2021 that provides code completions based on context.
+Zero-shot performance,The ability of a model to perform well on tasks it has not been specifically trained for.
+Computational Tools,Software programs used to perform calculations or simulations.
+Safety controls,Measures taken to ensure safe handling and execution of chemical reactions.
+MRKL,"A workflow that combines chain-of-thought reasoning with tool usage, similar to ReAct."
+Chemistry operations,Basic mathematical and chemical tasks that can be performed using dedicated tools.
+GPT-4,A version of a large language model (LLM) used in natural language processing tasks.
+Experimental Nature,The highly experimental nature of the chemistry field.
+Non-experts,"Individuals without specialized knowledge or training in a particular field, such as chemistry."
+Toolsets,"Collections of tools designed to perform specific tasks, such as those implemented in ChemCrow."
+Molecular graph,A visual representation of a molecule's structure.
+Mathematical operations,"Basic arithmetic calculations that can be performed using dedicated tools, such as calculators."
+Plugins,Additional software components that provide specialized functionality to existing programs.
+Task,A specific objective or problem to be solved.
+Tool,A program or software component designed to perform a specific function or task.
+De-novo Molecular Generation,The generation of new molecules from scratch using AI systems.
+Chemistry-related packages,Software libraries or modules focused on chemistry tasks.
+Cloud labs,Remote laboratories that can execute experiments and provide results over the cloud.
+Reaction-specific tools,Tools designed specifically for predicting or executing chemical reactions.
+Transformer architecture,"A type of neural network architecture used in natural language processing tasks, such as machine translation."
+Target molecules,Molecules to be synthesized or studied using AI systems.
+Calculator,A tool used for basic arithmetic calculations.
+Use cases,Real-world scenarios that demonstrate the applicability and effectiveness of a system or tool.
+Bayesian Optimization,"An optimization technique used in various fields, including chemistry."
+Section 5.3,A section in the text that provides more information on ChemCrow's tools.
+Core design,The fundamental architecture or structure of large language models (LLMs).
+Subsequent words,Words that follow a specific word or phrase in a sentence.
+OPSIN,A tool used for converting IUPAC names to molecular structures.
+User-given prompt,An instruction or query provided by the user to guide the task-solving process.
+Loop,The iterative chain-of-thought process used in ChemCrow's workflow.
+Integrability,The ability of tools to integrate and work together seamlessly.
+Physical lab,A real-world laboratory where experiments can be executed and results observed.
+Reaction properties,"Properties or characteristics of chemical reactions, such as yield or rate."
+Hyperconfident,"Overly confident in making predictions or providing answers, often resulting in errors."
+Natural language processing tasks,"Tasks that involve understanding and generating human-like language, such as text classification or machine translation."
+Automation,The use of software programs to automate repetitive or complex tasks.
+Chain-of-thought process,"A workflow that involves breaking down a task into smaller steps and executing them iteratively, often used in combination with tool usage."
+Code-generating LLMs,Large language models trained on code data for generating text or programming code.
+Open-source Community,A community of developers and users who contribute to open-source software projects.
+Reasoning engine,"An artificial intelligence system that can reason about a task, plan next steps, and execute actions accordingly."
+Figure 0(b),An illustration of the toolsets implemented in ChemCrow.
+StarCoder,A code-generating tool introduced after GitHub Copilot.
+Artificial Intelligence (AI),The field of study dealing with intelligent machines or software programs that can perform human-like tasks.
+Interoperability,The ability of tools to work together seamlessly and exchange data between them.
+Expert chemists,Chemists who have specialized knowledge or training in the field of chemistry.
+Accurate chemical knowledge,"Reliable information about chemical compounds, reactions, or properties."
+Dedicated external tools,Tools specifically designed for tasks outside of a model's primary capabilities.

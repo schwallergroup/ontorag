@@ -1,4 +1,4 @@
-# TERMO: TERM ExtractiOn from Scientific Literature
+# TERMO: Term Extraction from Scientific Literature
 
 TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
 
