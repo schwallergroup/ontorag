@@ -1,0 +1,194 @@
+In organic chemistry, a functional group is a substituent or moiety in a molecule that determines the molecule's characteristic chemical reactions. The same functional group typically undergoes similar reactions, regardless of the rest of the molecule's structure. This predictability allows for the systematic design of chemical synthesis and reaction prediction. The reactivity of a functional group can be influenced by nearby groups, and functional group interconversion is key in planning organic synthesis.
+
+Functional groups are groups of atoms in a molecule with specific chemical properties. They are linked to the rest of the molecule by covalent bonds. In polymers, functional groups can add chemical character to nonpolar carbon chains. Some functional groups are charged, such as carboxylate salts, turning the molecule into a polyatomic ion or coordination complex. In coordination chemistry, functional groups that bind to a central atom are called ligands. Functional groups also play a role in solubility; for example, sugar dissolves in water because both share hydroxyl groups that interact well with each other.
+
+Functional groups impact the nomenclature of organic compounds. Traditional naming involves alpha, beta, gamma, etc., while IUPAC conventions use numeric labels, such as 4-aminobutanoic acid. Functional groups contribute to the classification of molecules, and the naming system combines group names with parent alkane names to create systematic names. While "moiety" overlaps with "functional group," a moiety can refer to larger units containing multiple functional groups, like an aryl moiety.
+
+### Tables of Functional Groups
+
+The following is a list of tables of functional groups, where R and R' typically represent hydrogen or hydrocarbon side chains but can also refer to any group of atoms.
+
+---
+
+Classes of hydrocarbons are:
+- Alkane
+- Alkene
+- Alkyne
+- Benzene Derivative
+
+Alkyl is a subclass of Alkane. Alkenyl is a subclass of Alkene. Alkynyl is a subclass of Alkyne. Phenyl is a subclass of Benzene Derivative.
+
+---
+
+Classes of groups containing halogen are:
+- Haloalkane
+- Fluoroalkane
+- Chloroalkane
+- Bromoalkane
+- Iodoalkane
+
+Halo is a subclass of Haloalkane. Fluoro is a subclass of Fluoroalkane. Chloro is a subclass of Chloroalkane. Bromo is a subclass of Bromoalkane. Iodo is a subclass of Iodoalkane.
+
+---
+
+Classes of groups containing oxygen are:
+- Alcohol
+- Ketone
+- Aldehyde
+- Acyl Halide
+- Carbonate
+- Carboxylate
+- Carboxylic Acid
+- Ester
+- Hydroperoxide
+- Peroxide
+- Ether
+- Hemiacetal
+- Hemiketal
+- Acetal
+- Ketal
+- Orthoester
+- Heterocycle (cyclic)
+- Orthocarbonate Ester
+
+Hydroxyl is a subclass of Alcohol. Ketone is a subclass of Ketone. Aldehyde is a subclass of Aldehyde. Haloformyl is a subclass of Acyl Halide. Carbonate Ester is a subclass of Carbonate. Carboxylate is a subclass of Carboxylate. Carboxyl is a subclass of Carboxylic Acid. Carboalkoxy is a subclass of Ester. Hydroperoxy is a subclass of Hydroperoxide. Peroxy is a subclass of Peroxide. Ether is a subclass of Ether. Hemiacetal is a subclass of Hemiacetal. Hemiketal is a subclass of Hemiketal. Acetal is a subclass of Acetal. Ketal (Acetal) is a subclass of Ketal. Orthoester is a subclass of Orthoester. Methylenedioxy is a subclass of Heterocycle (cyclic). Orthocarbonate Ester is a subclass of Orthocarbonate Ester.
+
+---
+
+Groups containing nitrogen are:
+- Amide
+- Amidine
+- Amine
+- Hydrazone
+- Imine
+- Imide
+- Azide
+- Azo compound
+- Cyanate
+- Nitrate
+- Nitrile
+- Nitrite
+- Nitro compound
+- Nitroso compound
+- Oxime
+- Pyridine derivative
+- Carbamate ester
+
+Carboxamide is a subclass of Amide.  
+Amidine is a subclass of Amidine.  
+Primary amine, Secondary amine, Tertiary amine, and 4deg ammonium ion are subclasses of Amine.  
+Hydrazone is a subclass of Hydrazone.  
+Primary ketimine, Secondary ketimine, Primary aldimine, and Secondary aldimine are subclasses of Imine.  
+Imide is a subclass of Imide.  
+Azide is a subclass of Azide.  
+Azo (Diimide) is a subclass of Azo compound.  
+Cyanate and Isocyanate are subclasses of Cyanate.  
+Nitrate is a subclass of Nitrate.  
+Nitrile and Isonitrile are subclasses of Nitrile.  
+Nitrosooxy is a subclass of Nitrite.  
+Nitro is a subclass of Nitro compound.  
+Nitroso is a subclass of Nitroso compound.  
+Oxime is a subclass of Oxime.  
+Pyridyl is a subclass of Pyridine derivative.  
+Carbamate is a subclass of Carbamate ester.
+
+---
+
+Groups containing sulfur are:
+- Thiol
+- Sulfide (Organic)
+- Disulfide
+- Sulfoxide
+- Sulfone
+- Sulfinic Acid
+- Sulfonic Acid
+- Sulfonate Ester
+- Thiocyanate
+- Isothiocyanate
+- Thioketone
+- Thial
+- Thiocarboxylic Acid
+- Thiolester
+- Thionoester
+- Carbodithioic Acid
+- Dithiocarboxylic Acid Ester
+
+Sulfhydryl is a subclass of Thiol.  
+Sulfide is a subclass of Sulfide (Organic).  
+Disulfide is a subclass of Disulfide.  
+Sulfinyl is a subclass of Sulfoxide.  
+Sulfonyl is a subclass of Sulfone.  
+Sulfino is a subclass of Sulfinic Acid.  
+Sulfo is a subclass of Sulfonic Acid and Sulfonate Ester.  
+Thiocyanate is a subclass of Thiocyanate.  
+Isothiocyanate is a subclass of Isothiocyanate.  
+Carbonothioyl is a subclass of Thioketone and Thial.  
+Carbothioic S-acid and Carbothioic O-acid are subclasses of Thiocarboxylic Acid.  
+Thiolester is a subclass of Thiolester.  
+Thionoester is a subclass of Thionoester.  
+Carbodithioic Acid is a subclass of Carbodithioic Acid.  
+Carbodithio is a subclass of Dithiocarboxylic Acid Ester.
+
+---
+
+Groups containing phosphorus are:
+- Phosphine
+- Phosphonic Acid
+- Phosphate
+- Phosphodiester
+- Boronic Acid
+- Boronic Ester
+- Borinic Acid
+- Borinic Ester
+
+Phosphino is a subclass of Phosphine.  
+Phosphono is a subclass of Phosphonic Acid.  
+Phosphate is a subclass of Phosphate and Phosphodiester.  
+Borono is a subclass of Boronic Acid.  
+Boronate is a subclass of Boronic Ester.  
+Borino is a subclass of Borinic Acid.  
+Borinate is a subclass of Borinic Ester.
+
+---
+
+Classes of groups containing metal are:
+
+    Alkyllithium
+    Alkylmagnesium Halide
+    Alkylaluminium
+    Silyl Ether
+
+Examples:
+
+    Methyllithium is an example of Alkyllithium.
+    Methylmagnesium Chloride is an example of Alkylmagnesium Halide.
+    Trimethylaluminium is an example of Alkylaluminium.
+    Trimethylsilyl Triflate is an example of Silyl Ether.
+
+> **Note**: Fluorine is too electronegative to be bonded to magnesium; it becomes an ionic salt instead.
+
+---
+
+#### Names of Radicals or Moieties
+
+These names are used to refer to the moieties themselves or to radical species, and also to form the names of halides and substituents in larger molecules.
+
+When the parent hydrocarbon is unsaturated, the suffix ("-yl", "-ylidene", or "-ylidyne") replaces "-ane" (e.g., "ethane" becomes "ethyl"); otherwise, the suffix replaces only the final "-e" (e.g., "ethyne" becomes "ethynyl").
+
+When used to refer to moieties, multiple single bonds differ from a single multiple bond. For example, a methylene bridge (methanediyl) has two single bonds, whereas a methylidene group (methylidene) has one double bond. Suffixes can be combined, as in methylidyne (triple bond) vs. methylylidene (single bond and double bond) vs. methanetriyl (three double bonds).
+
+There are some retained names, such as methylene for methanediyl, 1,x-phenylene for phenyl-1,x-diyl (where x is 2, 3, or 4), carbyne for methylidyne, and trityl for triphenylmethyl.
+
+Classes of compounds by bond type and radicals are:
+
+    Single Bond
+    Double Bond
+    Triple Bond
+    Carboxylic Acyl Radical
+
+Subclass relationships:
+
+    Single Bond has a radical form represented by R*, with the suffix -yl, as in the Methyl Group or Methyl Radical.
+    Double Bond has a radical form represented by R:, with the suffix -ylidene, as in Methylidene.
+    Triple Bond has a radical form represented by R, with the suffix -ylidyne, as in Methylidyne.
+    Acyl is a subclass of Carboxylic Acyl Radical, represented by R-C(=O)*, with the suffix -oyl, as in Acetyl.

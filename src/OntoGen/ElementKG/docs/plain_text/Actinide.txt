@@ -1,0 +1,22 @@
+The actinide () or actinoid () series encompasses at least the 14 metallic chemical elements in the 5f series, with atomic numbers from 89 to 102, actinium through nobelium. (Number 103, lawrencium, is sometimes also included despite being part of the 6d transition series.) The actinide series derives its name from the first element in the series, actinium. The informal chemical symbol An is used in general discussions of actinide chemistry to refer to any actinide.
+All the actinides are f-block elements. Lawrencium is sometimes considered one as well, despite being a d-block element and a transition metal. The series mostly corresponds to the filling of the 5f electron shell, although as isolated atoms in the ground state many have anomalous configurations involving the filling of the 6d shell due to interelectronic repulsion. In comparison with the lanthanides, also mostly f-block elements, the actinides show much more variable valence. They all have very large atomic and ionic radii and exhibit an unusually large range of physical properties. While actinium and the late actinides (from curium onwards) behave similarly to the lanthanides, the elements thorium, protactinium, and uranium are much more similar to transition metals in their chemistry, with neptunium, plutonium, and americium occupying an intermediate position.
+All actinides are radioactive and release energy upon radioactive decay; naturally occurring uranium and thorium, and synthetically produced plutonium are the most abundant actinides on Earth. These have been used in nuclear reactors, and uranium and plutonium are critical elements of nuclear weapons. Uranium and thorium also have diverse current or historical uses, and americium is used in the ionization chambers of most modern smoke detectors.
+Of the actinides, primordial thorium and uranium occur naturally in substantial quantities. 
+
+List of Actinide Elements:
+
+Actinium (sometimes considered a transition metal yet not an actinide)
+Thorium
+Protactinium
+Uranium
+Neptunium
+Plutonium
+Americium
+Curium
+Berkelium
+Californium
+Einsteinium
+Fermium
+Mendelevium
+Nobelium
+Lawrencium (sometimes considered a transition metal yet not an actinide) 

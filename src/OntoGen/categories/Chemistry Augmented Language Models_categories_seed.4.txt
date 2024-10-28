@@ -1,0 +1,31 @@
+I found an error in the previous formatting. Here is the corrected version:
+
+Main Category 1: Chemistry
+
+    Subcategory 1: Molecular Property Prediction
+    Subcategory 2: Materials Design
+    Subcategory 3: Drug Discovery
+    Subcategory 4: Organic Synthesis
+    Subcategory 5: Reaction Prediction
+
+Main Category 2: Tools and Technologies
+
+    Subcategory 1: Expert-Designed Tools
+    Subcategory 2: Web and Literature Search
+    Subcategory 3: Cloud Labs and Robotic Synthesis Platforms
+
+Main Category 3: Language Models
+
+    Subcategory 1: Large Language Models (LLMs)
+    Subcategory 2: Transformer Architecture
+
+Main Category 4: Applications and Tasks
+
+    Subcategory 1: Chemical Synthesis
+    Subcategory 2: Drug Discovery
+    Subcategory 3: Materials Design
+
+Main Category 5: Evaluation and Assessment
+
+    Subcategory 1: Evaluation Metrics
+    Subcategory 2: Human Evaluation

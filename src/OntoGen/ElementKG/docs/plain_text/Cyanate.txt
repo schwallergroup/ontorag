@@ -1,0 +1,6 @@
+The cyanate ion is an anion with the chemical formula OCN-. It is a resonance of three forms: [O--CN] (61%) - [O=C=N-] (30%) - [O+C-N2-] (4%).
+Cyanate is the derived anion of isocyanic acid, H-N=C=O, and its lesser tautomer cyanic acid (a.k.a. cyanol), H-O-CN.
+Any salt containing the ion, such as ammonium cyanate, is called a cyanate.
+The cyanate ion is an isomer of the much-less-stable fulminate anion, CNO- or [C-N+-O-].
+The cyanate ion is an ambidentate ligand, forming complexes with a metal ion in which either the nitrogen or oxygen atom may be the electron-pair donor. It can also act as a bridging ligand.
+Compounds that contain the cyanate functional group, -O-CN, are known as cyanates or cyanate esters. The cyanate functional group is distinct from the isocyanate functional group, -N=C=O; the fulminate functional group, -O-N+C-; and the nitrile oxide functional group, -CNO or -CN+-O-.

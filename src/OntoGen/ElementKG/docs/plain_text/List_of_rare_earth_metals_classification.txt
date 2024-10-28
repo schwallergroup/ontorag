@@ -1,0 +1,41 @@
+Rare earth metals:
+ - Sc
+ - Dy
+ - Ho
+ - Yb
+ - Tb
+ - Y
+ - Lu
+ - Er
+ - Gd
+ - Tm
+ - Pm
+ - Nd
+ - La
+ - Ce
+ - Sm
+ - Eu
+ - Pr
+ 
+Light rare earth metals:
+ - Pm
+ - Nd
+ - La
+ - Ce
+ - Sm
+ - Eu
+ - Pr
+ 
+Heavy rare earth metals:
+ - Sc
+ - Dy
+ - Ho
+ - Yb
+ - Tb
+ - Y
+ - Lu
+ - Er
+ - Gd
+ - Tm
+ 
+

@@ -1,8 +1,12 @@
 import argparse
 import random
 import ollama
+import logging
 from utils import read_text, write_text
 from pathlib import Path
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 prompt_generate_cats = '''
@@ -196,11 +200,12 @@ def generate_categories(
         main_topic, 
         generation_model, 
         format_model, 
+        synthesis_model,
         num_retries_consistency=20, 
         num_generated_seed=20,
-        model=None, 
-        temperature=None,
         generation_model_options={},
+        format_model_options={},
+        synthesis_model_options={},
     ):
 
     # random shuffle the list of files
@@ -215,6 +220,7 @@ def generate_categories(
     
     responses = []
     for retry in range(num_retries_consistency):
+        logging.info(f'Generating categories Retry {retry + 1}/{num_retries_consistency}')
         formated_prompt = prompt_generate_cats.format(CONTEXT=context, TOPIC=main_topic)
         response = ollama.chat(model=generation_model, messages=[
             {
@@ -223,26 +229,39 @@ def generate_categories(
             },
         ], options=generation_model_options)
         responses.append(response['message']['content'])
+        logging.info(response['message']['content'])
 
     formated_responses = []
     responses = [c for c in responses if len(c.strip()) > 0]
-    for response in responses:
-        response = llm_format_cats(response)
+    for i, response in enumerate(responses):
+        logging.info(f'Formatting category {i + 1}/{len(responses)}')
+        response = llm_format_cats(response, format_model, options=format_model_options)
         formated_responses.append(response)
+        logging.info(response)
 
     formated_responses_reduced = []
     for response in formated_responses:
         formated_responses_reduced.append(parse_cats_and_subcats(response))
     filtered_cats_text = cats_to_str(formated_responses_reduced)
     
-    results = []
+    synthesized_cats = []
     for i in range(num_generated_seed):
-        res = llm_synthesize_cats(filtered_cats_text)
-        results.append(res)
+        logging.info(f'Synthesizing categories {i + 1}/{num_generated_seed}')
+        res = llm_synthesize_cats(filtered_cats_text, synthesis_model, options=synthesis_model_options)
+        synthesized_cats.append(res)
+        logging.info(res)
+
+    formated_responses = []
+    responses = [c for c in responses if len(c.strip()) > 0]
+    for i, response in enumerate(synthesized_cats):
+        logging.info(f'Formatting category {i + 1}/{len(responses)}')
+        response = llm_format_cats(response, format_model, options=format_model_options)
+        formated_responses.append(response)
+        logging.info(response)
         
     categories_folder = Path('categories')
     categories_folder.mkdir(exist_ok=True)
-    for i, res in enumerate(results):
+    for i, res in enumerate(formated_responses):
         write_text(categories_folder / f'{main_topic}_categories_seed.{i}.txt', res)
 
 
@@ -250,26 +269,58 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Generate possible categories seeds from a list of txt files.')
     parser.add_argument('main_topic', type=str, help='Main topic to generate categories for.')
     parser.add_argument('txt_files', type=str, nargs='+', help='Path to the text files to process.')
-    parser.add_argument('--model', '-m', help='Ollama model tag to use.', type=str)
-    parser.add_argument('--temperature', '-t', help='Model temperature to use.', type=float)
+    parser.add_argument('--generation-model', '-gm', help='Ollama model tag to use to generate categories.', type=str)
+    parser.add_argument('--generation-temperature', '-gt', help='Model temperature to use to generate categories.', type=float)
+    parser.add_argument('--generation-num-ctx', '-gc', help='Context length in tokens to use to generate categories.', type=int)
+    parser.add_argument('--format-model', '-fm', help='Ollama model tag to use to format categories.', type=str)
+    parser.add_argument('--format-temperature', '-ft', help='Model temperature to use to format categories.', type=float)
+    parser.add_argument('--format-num-ctx', '-fc', help='Context length in tokens to use to format categories.', type=int)
+    parser.add_argument('--synthesis-model', '-sm', help='Ollama model tag to use to synthesize categories.', type=str)
+    parser.add_argument('--synthesis-temperature', '-st', help='Model temperature to use to synthesize categories.', type=float)
+    parser.add_argument('--synthesis-num-ctx', '-sc', help='Context length in tokens to use to synthesize categories.', type=int)
+    parser.add_argument('--num-retries', '-r', help='Number of retries to ensure consistency.', type=int, default=20)
+    parser.add_argument('--num-generated-seed', '-s', help='Number of generated seeds.', type=int, default=20)
 
     args = parser.parse_args()
     main_topic = args.main_topic
     txt_files = args.txt_files
-    model = args.model
+    num_retries = args.num_retries
+    num_generated_seed = args.num_generated_seed
 
-    options = {}
-    if args.temperature:
-        options['temperature'] = args.temperature
+    generation_model = args.generation_model
+    format_model = args.format_model
+    synthesis_model = args.synthesis_model
+
+    options_generation = {}
+    if args.generation_temperature:
+        options_generation['temperature'] = args.generation_temperature
+    if args.generation_num_ctx:
+        options_generation['num_ctx'] = args.generation_num_ctx
+
+    options_format = {}
+    if args.format_temperature:
+        options_format['temperature'] = args.format_temperature
+    if args.format_num_ctx:
+        options_format['num_ctx'] = args.format_num_ctx
+
+    options_synthesis = {}
+    if args.synthesis_temperature:
+        options_synthesis['temperature'] = args.synthesis_temperature
+    if args.synthesis_num_ctx:
+        options_synthesis['num_ctx'] = args.synthesis_num_ctx
 
     generate_categories(
         txt_files, 
         main_topic, 
-        model, 
-        model, 
-        model=model, 
-        temperature=args.temperature,
-        generation_model_options=options
+        generation_model, 
+        format_model, 
+        synthesis_model,
+        num_retries_consistency=num_retries,
+        num_generated_seed=num_generated_seed,
+        generation_model_options=options_generation,
+        format_model_options=options_format,
+        synthesis_model_options=options_synthesis,
+
     )
     
 

@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument('txt_file', type=str, help='Path to the text file to process.')
     parser.add_argument('--max_length_split_terms', help='Maximum length (in characters) of the text to split for terms extraction.', type=int, default=2000)
     parser.add_argument('--max_length_split_acronyms', help='Maximum length (in characters) of the text to split for acronyms extraction.', type=int, default=2000)
-    parser.add_argument('--max_length_split_definitions', help78='Maximum length (in characters) of the text to split for definitions extraction.', type=int, default=2000)
+    parser.add_argument('--max_length_split_definitions', help='Maximum length (in characters) of the text to split for definitions extraction.', type=int, default=2000)
     parser.add_argument('--max_length_split_relationships', help='Maximum length (in characters) of the text to split for relationships extraction.', type=int, default=2000)
     parser.add_argument('--temperature', '-t', help='Model temperature to use.', type=float)
     parser.add_argument('--num_ctx', '-n', help='Context length in tokens to use.', type=int)
