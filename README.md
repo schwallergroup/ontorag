@@ -1,12 +1,5 @@
 
 
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/repo_logo_dark.png" width='100%'>
-  <source media="(prefers-color-scheme: light)" srcset="./assets/repo_logo_light.png" width='100%'>
-  <img alt="Project logo" src="/assets/" width="100%">
-</picture>
-
 <br>
 
 [![tests](https://github.com/schwallergroup/ontorag/actions/workflows/tests.yml/badge.svg)](https://github.com/schwallergroup/ontorag)

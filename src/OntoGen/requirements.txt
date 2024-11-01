@@ -1,0 +1,7 @@
+transformers==4.44.2
+unidecode
+ollama
+nougat-ocr
+pymupdf
+spacy
+owlready2

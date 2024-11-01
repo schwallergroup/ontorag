@@ -1,0 +1,7 @@
+Ketone,contains,carbonyl group
+Carbonyl group,contains,carbon-oxygen double bond
+Carbon-oxygen double bond,represented as,C=O
+Acetone,is a,ketone
+Sugars,include,ketoses
+Steroids,include,testosterone
+Acetone,is a,solvent

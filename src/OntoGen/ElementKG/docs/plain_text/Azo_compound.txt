@@ -1,0 +1,3 @@
+Azo compounds are organic compounds bearing the functional group diazenyl (R-N=N-R', in which R and R' can be either aryl or alkyl groups). 
+IUPAC defines azo compounds as: "Derivatives of diazene (diimide), HN=NH, wherein both hydrogens are substituted by hydrocarbyl groups, e.g. PhN=NPh azobenzene or diphenyldiazene.", where Ph stands for phenyl group. The more stable derivatives contain two aryl groups. The N=N group is called an azo group (from French  azote 'nitrogen', from Ancient Greek  a- (a-) 'not' and  zoe (zoe) 'life').
+Many textile and leather articles are dyed with azo dyes and pigments.

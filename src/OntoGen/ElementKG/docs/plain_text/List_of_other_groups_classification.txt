@@ -1,0 +1,28 @@
+Platinum group metals:
+ - Ir
+ - Pt
+ - Pd
+ - Rh
+ 
+Post transition metals:
+ - Sn
+ - Al
+ - Pb
+ - Bi
+ - Ga
+ - In
+ - Po
+ - Tl
+ 
+Reactive non metals:
+ - Br
+ - I
+ - Se
+ - Cl
+ - S
+ - O
+ - P
+ - F
+ - H
+ - C
+ - N

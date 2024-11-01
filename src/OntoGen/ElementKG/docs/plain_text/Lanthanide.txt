@@ -1,0 +1,20 @@
+The lanthanide () or lanthanoid () series of chemical elements comprises at least the 14 metallic chemical elements with atomic numbers 57-70, from lanthanum through ytterbium. In the periodic table, they fill the 4f orbitals. Lutetium (element 71) is also sometimes considered a lanthanide, despite being a d-block element and a transition metal.
+The informal chemical symbol Ln is used in general discussions of lanthanide chemistry to refer to any lanthanide. All but one of the lanthanides are f-block elements, corresponding to the filling of the 4f electron shell. Lutetium is a d-block element (thus also a transition metal), and on this basis its inclusion has been questioned; however, like its congeners scandium and yttrium in group 3, it behaves similarly to the other 14. The term rare-earth element or rare-earth metal is often used to include the stable group 3 elements Sc, Y, and Lu in addition to the 4f elements. All lanthanide elements form trivalent cations, Ln3+, whose chemistry is largely determined by the ionic radius, which decreases steadily from lanthanum (La) to lutetium (Lu).
+
+List of lanthanide elements:
+
+    Lanthanum
+    Cerium
+    Praseodymium
+    Neodymium
+    Promethium
+    Samarium
+    Europium
+    Gadolinium
+    Terbium
+    Dysprosium
+    Holmium
+    Erbium
+    Thulium
+    Ytterbium
+    Lutetium

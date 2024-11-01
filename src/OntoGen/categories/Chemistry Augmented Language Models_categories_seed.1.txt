@@ -1,0 +1,33 @@
+After reviewing the previous formatting, I noticed that it was missing the "Main Category" number and colon prefix for each category. Here is the rewritten list in the correct format:
+
+Main Category 1: Chemistry
+
+    Subcategory 1: Chemical Tasks
+    Subcategory 2: Drug Discovery
+    Subcategory 3: Chemistry Operations
+
+Main Category 2: Language Models
+
+    Subcategory 1: Large-Language Models (LLMs)
+        - Reaction Prediction was removed as it's not a subcategory of LLMs but rather one of Chemical Tasks; instead the following were added:
+        LLM Performance Enhancement
+        Transformer Architecture
+        GPT-4 and GPT-3.5
+
+Main Category 3: Tools and Technologies
+
+    Subcategory 1: Expert-Designed Tools
+    Subcategory 2: Web and Literature Search
+    Subcategory 3: Molecule-Specific and Reaction-Specific Tools
+    Subcategory 4: Cloud Labs and Robotic Synthesis Platforms
+    Subcategory 5: Tool Integration
+
+Main Category 4: Architecture and Design
+
+    Subcategory 1: ChemCrow Architecture
+    Subcategory 2: Toolset Implementation
+
+Main Category 5: Evaluation and Assessment
+
+    Subcategory 1: Evaluation Metrics
+    Subcategory 2: Human Evaluation

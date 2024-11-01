@@ -1,0 +1,16 @@
+insect repellent,"a substance used to repel insects, synthesized by ChemCrow."
+scientific applications,"refers to the use of large-language models (LLMs) in chemistry-related problems, which they struggle with."
+drug discovery,"one of the tasks accomplished by ChemCrow, an LLM chemistry agent."
+organocatalysts,"substances synthesized by ChemCrow, used for catalyzing chemical reactions."
+GPT-4,"a large-language model used as an evaluator, which cannot distinguish between clearly wrong completions and ChemCrow's performance."
+external knowledge sources,"refers to the lack of access to additional information sources in LLMs, limiting their usefulness."
+chromophore,"a novel substance discovered by ChemCrow, guided by its capabilities."
+ChemCrow,"an LLM chemistry agent that integrates 18 expert-designed tools to accomplish tasks across organic synthesis, drug discovery, and materials design."
+computational chemistry,"the field of study where excellent tools have been developed over the last decades, but with steep learning curves for users."
+chemical tasks,"a diverse set of tasks automated by ChemCrow, including syntheses and discovery."
+expert-designed tools,18 tools integrated into ChemCrow to enhance its performance in chemistry-related problems.
+organic synthesis,"one of the tasks accomplished by ChemCrow, involving the creation of complex molecules from simpler ones."
+accessibility,"refers to the goal of making computational chemistry tools more accessible to users, overcoming steep learning curves."
+learning curves,the challenges and difficulties faced by users when trying to use computational chemistry tools.
+large-language models (LLMs),"artificial intelligence systems that have shown strong performance in tasks across domains, but struggle with chemistry-related problems."
+materials design,"one of the tasks accomplished by ChemCrow, involving the creation of new substances with specific properties."

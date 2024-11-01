@@ -1,0 +1,4 @@
+ollama
+spacy
+anthropic
+thinc

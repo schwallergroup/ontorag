@@ -1,0 +1,9 @@
+ChemCrow,augments,LLMs
+LLMs,lack access to,external knowledge sources
+ChemCrow,integrates,expert-designed tools
+organic synthesis,is a task accomplished by,ChemCrow
+drug discovery,is a task accomplished by,ChemCrow
+materials design,is a task accomplished by,ChemCrow
+insect repellent,was synthesized by,ChemCrow
+organocatalysts,were synthesized by,ChemCrow
+chromophore,was discovered by,ChemCrow

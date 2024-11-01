@@ -1,0 +1,8 @@
+Amidines are organic compounds with the functional group RC(NR)NR2, where the R groups can be the same or different. They are the imine derivatives of amides (RC(O)NR2). The simplest amidine is formamidine, HC(=NH)NH2.
+Examples of amidines include:
+
+DBU
+diminazene
+benzamidine
+Pentamidine
+Paranyline

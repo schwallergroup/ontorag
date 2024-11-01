@@ -1,0 +1,7 @@
+Borinic acid, also known as boronous acid, is  an oxyacid of boron with formula H2BOH. Borinate is the associated anion of borinic acid with formula H2BO-; however, being a Lewis acid, the form in basic solution is H2B(OH)-2.
+Borinic acid can be formed as the first step in the hydrolysis of diborane:
+
+BH3 + H2O - H2BOH + H2
+Borinic acid itself is unstable and only lasts for a few seconds during the hydrolysis reaction. However, by using microwave spectroscopy various properties can be determined. The B-O distance is 1.352 A, O-H distance 0.96 A, B-H length is probably 1.2 A.  The angle between bonds at the oxygen atom BOH = 112deg and the angles at boron are cis-HBO 121deg, and trans-HBO = 117deg.  The dipole moment is 1.506 Debye.
+Borinic acid can form esters such as methoxyborane. This too is unstable only lasting about ten seconds. It can be formed by heating diborane and methanol gas together.
+By substituting organic components instead of hydrogen, more generic borinic acids (containing RR'BOH) or borinic esters (RR'BOR") can be formed. Esters will tend to be stable in acidic conditions, but in alkaline conditions the boron atom can gain a negative charge and attach two hydroxyl groups, or two ester bonds. RR'B-(OH)2 or RR'B-(OR")2.  The anionic borinate ion can very easily form esters with diols such as ethylene glycol or sugars.

@@ -1,0 +1,4 @@
+In chemistry, amines (, UK also ) are compounds and functional groups that contain a basic nitrogen atom with a lone pair. Formally, amines are derivatives of ammonia (NH3), wherein one or more hydrogen atoms have been replaced by a substituent such as an alkyl or aryl group (these may respectively be called alkylamines and arylamines; amines in which both types of substituent are attached to one nitrogen atom may be called alkylarylamines). Important amines include amino acids, biogenic amines, trimethylamine, and aniline. Inorganic derivatives of ammonia are also called amines, such as monochloramine (NClH2).
+The substituent -NH2 is called an amino group.
+Compounds with a nitrogen atom attached to a carbonyl group, thus having the structure R-C(=O)-NR'R'', are called amides and have different chemical properties from amines.
+

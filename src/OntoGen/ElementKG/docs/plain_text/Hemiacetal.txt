@@ -1,0 +1,1 @@
+In organic chemistry, a hemiacetal or a hemiketal has the general formula R1R2C(OH)OR, where R1, R2 is hydrogen or an organic substituent. They generally result from the addition of an alcohol (a compound with at least one -OH group) to an aldehyde (R-CH=O) or a ketone (R2C=O), although the latter are sometimes called hemiketals. Most sugars are hemiacetals.
