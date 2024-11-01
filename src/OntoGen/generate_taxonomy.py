@@ -46,6 +46,17 @@ The answer should include 'isA'.
 
 
 def get_initial_categories(category_seed_file):
+    '''
+    Extract list of categories from the category seed file formated as follows:
+    
+    Main Category: Category 1
+        ...
+    Main Category: Category N
+        ...
+
+    Parameters:
+    category_seed_file (str): Path to the category seed file.
+    '''
     cats = []
     with open(category_seed_file, 'r') as f:
         lines = f.readlines()
@@ -62,6 +73,12 @@ def get_initial_categories(category_seed_file):
 
 
 def universal_id(word):
+    '''
+    Get unique id for a word. The id is obtained by lowercasing the word, removing dashes, and lemmatizing it.
+
+    Parameters:
+    word (str): Word to get the unique id.
+    '''
     word = word.replace('-', ' ')
     words = word.split(' ')
     for i in range(len(words)):
@@ -74,6 +91,18 @@ def universal_id(word):
 
 
 def process_vocabulary(vocabulary, acronyms):
+    '''
+    Process the vocabulary by removing acronyms, dashes, and asterisks, while keeping all the transformations applied as synonyms.
+    Return the processed vocabulary and a dictionary with the id to synonyms.
+
+    Parameters:
+    vocabulary (list): List of terms to process.
+    acronyms (dict): Dictionary with acronyms and their corresponding terms.
+
+    Returns:
+    list: Processed vocabulary.
+    dict: Dictionary with the id to synonyms.
+    '''
     id_to_synonyms = defaultdict(set)
 
     # remove asterisks as these are probably artifacts from vocabulary extraction
@@ -121,6 +150,20 @@ def process_vocabulary(vocabulary, acronyms):
 
 
 def query(model, context, taxonomy, terms, options={}):
+    '''
+    Query the taxonomic relations of a list of terms given a context and a taxonomy,
+    using an Ollama model.
+
+    Parameters:
+    model (str): Ollama model tag to use.
+    context (str): Context to use in the query.
+    taxonomy (str): Taxonomy to use in the query.
+    terms (list): List of terms to classify.
+    options (dict): Options to use in the query.
+
+    Returns:
+    str: Response from the Ollama model.
+    '''
     formated_prompt = prompt.format(CONTEXT=context, TAXONOMY=taxonomy, TERMS='\n'.join([t + ' isA ' for t in terms]))
     logging.info("PROMPT:" + formated_prompt)
     response = ollama.chat(model=model, messages=[
@@ -133,6 +176,17 @@ def query(model, context, taxonomy, terms, options={}):
 
 
 def parse_answer(answer):
+    '''
+    Parse the answer from the Ollama model to extract the taxonomic relations.
+    Receives the answer and returns a dictionary with the terms and their corresponding categories.
+    The expected input has relationship in the form of 'A isA B' or 'A is B' or 'A: B'.
+
+    Parameters:
+    answer (str): Answer from the Ollama model.
+
+    Returns:
+    dict: Dictionary with the terms and their corresponding categories.
+    '''
     lines = answer.split('\n')
     res = {}
     for l in lines:
@@ -161,6 +215,20 @@ def parse_answer(answer):
 
 
 def add_asnwers(wordmap, answers, root, destructive=False):
+    '''
+    Add taxonomic relationships to the wordmap dictionary of terms and tree nodes.
+    A relationship is discarded if it creates a loop in the tree or if the parent is already present in the child
+    or if both terms are the same.
+
+    Parameters:
+    wordmap (dict): Dictionary of terms and tree nodes.
+    answers (dict): Dictionary of terms and their corresponding categories. 
+    root (Tree): Root of the tree.
+    destructive (bool): If True, deletes a node from the tree if it was already present in the tree and creates a new one for each relationship.
+
+    Returns:
+    dict: Updated wordmap dictionary.
+    '''
     for k, v in answers.items():
         if 'None' in v:
             continue
@@ -188,6 +256,12 @@ def add_asnwers(wordmap, answers, root, destructive=False):
             
 
 def remove_self_loops_tree(tree):
+    '''
+    Recursive function to remove self loops from a tree.
+
+    Parameters:
+    tree (Tree): Tree to remove self loops.
+    '''
     for c in tree.children:
         c.children = [cc for cc in c.children if cc != tree]
         c = remove_self_loops_tree(c)
@@ -195,6 +269,18 @@ def remove_self_loops_tree(tree):
 
 
 def majority_voting_answers(wordmap, answers_list):
+    '''
+    Perform majority voting on a list of answers to get the most common taxonomic relationships.
+    The majority is calculated as the half of the number of answers plus one.
+    Relationships are discarded if they are not present in the wordmap or if the terms are the same.
+    
+    Parameters:
+    wordmap (dict): Dictionary of terms and tree nodes.
+    answers_list (list): List of dictionaries with terms and their corresponding categories.
+
+    Returns:
+    dict: Dictionary with the most common taxonomic relationships.
+    '''
     res = {}
     majority = len(answers_list) // 2 + 1
 
@@ -220,6 +306,20 @@ def generate_taxonomy(
         model_params,
         num_iterations,
         prompt_include_path):
+    '''
+    Generate a taxonomy from a list of text files using an Ollama model.
+
+    Parameters:
+    category_seed_file (str): Path to the category seed txt file.
+    txt_files (list): List of paths to the text files to process.
+    model (str): Ollama model tag to use to generate categories.
+    model_params (dict): Additional parameters to pass to the Ollama model.
+    num_iterations (int): Number of iterations to run for each text file. The majority answer from the answers from the iterations is used.
+    prompt_include_path (bool): Include a term path in the taxonomy (i.e. parent categories). 
+            If True, the parent categories are included in the taxonomy. This provides more context for the model but 
+            might bias the answers towards the parent categories, while making the output taxonomy more consistent and
+            less prone to errors.
+    '''
 
     cats = get_initial_categories(category_seed_file)
 

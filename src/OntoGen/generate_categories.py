@@ -101,7 +101,29 @@ def llm_format_cats(
         model,
         options,
         ):
+    '''
+    This function receives a string with categories and subcategories which might be incorrectly formatted.
+    The function uses an LLM to format the list of categories and subcategories to the same format,
+    which is the following:
 
+    Main Category 1: <Category name>
+    
+            Subcategory 1: <Subcategory name>
+            Subcategory 2: <Subcategory name>
+
+    Main Category 2: <Category name>
+
+            Subcategory 1: <Subcategory name>
+
+
+    The function will keep asking the user to fix the format until the format is correct or the maximum number of retries is reached.
+    If the output of the LLM is incorrectly formated, a self reflection prompt is used to ask the model again to fix the format.
+
+    Parameters:
+    cats (str): String with categories and subcategories.
+    model (str): Ollama model tag to use.
+    options (dict): Dictionary with options to use in the model.
+    '''
     formated_prompt = prompt_correct_format_cats.format(CATEGORIES=cats)
     response = ollama.chat(model=model, messages=[
         {
@@ -139,7 +161,17 @@ def llm_synthesize_cats(
         model,
         options
         ):
+    '''
+    This function receives a string with categories and subcategories and asks an LLM to 
+    synthesize the categories and subcategories into a more concise list with the most frequently mentioned categories.
+    If the output of the LLM is incorrectly formated, the model is prompted again with the same question. This is 
+    done to avoid answers where the output is empty or non-sensical.
 
+    Parameters:
+    cats (str): String with categories and subcategories.
+    model (str): Ollama model tag to use.
+    options (dict): Dictionary with options to use in the model.
+    '''
     formated_prompt = prompt_synthesize_cats.format(CATEGORIES=cats)
     response = ollama.chat(model=model, messages=[
         {
@@ -160,6 +192,23 @@ def llm_synthesize_cats(
 
 
 def parse_cats_and_subcats(text):
+    '''
+    This function receives a string with categories and subcategories with the following format:
+
+    Main Category 1: <Category name>
+    
+            Subcategory 1: <Subcategory name>
+            Subcategory 2: <Subcategory name>
+
+    Main Category 2: <Category name>
+    
+            Subcategory 1: <Subcategory name>
+
+    and returns a dictionary with the categories and subcategories.
+
+    Parameters:
+    text (str): String with categories and subcategories.
+    '''
     cats = {}
     lines = text.split('\n')
     i = 0
@@ -181,6 +230,23 @@ def parse_cats_and_subcats(text):
 
 
 def cats_to_str(cats):
+    '''
+    This function receives a dictionary with categories and subcategories and returns a string with the categories and subcategories,
+    formatted as follows:
+
+    <Main Category 1>
+        <Subcategory 1>
+        <Subcategory 2>
+    --------------------
+    <Main Category 2>
+        <Subcategory 1>
+        <Subcategory 2>
+        <Subcategory 3>
+    --------------------
+
+    Parameters:
+    cats (dict): Dictionary with categories and subcategories.
+    '''
     context = ''
     for answer in cats:
         if len(answer) == 0:
@@ -207,7 +273,23 @@ def generate_categories(
         format_model_options={},
         synthesis_model_options={},
     ):
-
+    '''
+    Generate multiple possible categories seeds from a list of txt files.
+    
+    Parameters:
+    txt_files (list): List of txt files to process.
+    main_topic (str): Main topic to generate categories for.
+    generation_model (str): Ollama model tag to use to generate categories.
+    format_model (str): Ollama model tag to use to format categories.
+    synthesis_model (str): Ollama model tag to use to synthesize frequent categories.
+    num_retries_consistency (int): Number of retries to use with self-consistency. 
+            A larger number will increase the chances of getting consistent results. (default: 20)
+    num_generated_seed (int): Number of seeds to generate. (default: 20)
+    generation_model_options (dict): Dictionary with options to use in the generation model.
+    format_model_options (dict): Dictionary with options to use in the format model.
+    synthesis_model_options (dict): Dictionary with options to use in the synthesis model.
+    '''
+    
     # random shuffle the list of files
     random.shuffle(txt_files)
 
