@@ -1,0 +1,2 @@
+
+from .orag import OntoTranslate

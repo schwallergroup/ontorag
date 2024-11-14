@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
 
-__all__ = ["SimpleORAG", "HyQORAG", "OntoRAGTM", "HyQOntoRAGTM"]
+__all__ = ["SimpleORAG", "HyQORAG", "OntoRAGTM", "HyQOntoRAGTM", "OntoTranslate"]
 
 
 class MedQnA(dspy.Signature):
