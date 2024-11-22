@@ -8,9 +8,10 @@ from dotenv import load_dotenv
 __all__ = ["QAZeroShot", "QAContext", "QAReason", "QAFull", "QATwoStep"]
 
 qprompt = "Here is the question you need to answer:"
-choice_prompt = "Answer to the question. Only one character."
+choice_prompt = "Answer: ${answer}"
 context_prompt = "Here is the context:"
 reasoning_prompt = "Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
+reasoning_prompt = "Reasoning: Let's think step by step to ${reasoning}."
 
 
 class MedQnA_ZeroShot(dspy.Signature):
@@ -65,6 +66,7 @@ class QAZeroShot(BaseQA):
     def forward(self, qprompt: str) -> Tuple[MedQnA_ZeroShot, str]:
         answer = self.predict(question=qprompt)
         answer.context = None
+        answer.choice_answer = answer.choice_answer.strip("Answer:").strip()
         return answer
 
 
