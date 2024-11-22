@@ -19,8 +19,8 @@ METHODS = {
     # "ontorag-hypo_ans": HyQORAG,
     # "ontorag-tm": OntoRAGTM,
     # "ontorag-hypo_ans-tm": HyQOntoRAGTM,
-    "rag-zeroshot": QAZeroShot,
-    # "rag-reason": QAReason,
+    "zeroshot": QAZeroShot,
+    # "CoT": QAReason,
     # 'rag-context': QAContext,
     # 'rag-full': QAFull,
 }
