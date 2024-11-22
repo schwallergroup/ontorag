@@ -18,7 +18,7 @@ run_benchmark() {
     if [[ $llm == *"mistral"* ]]; then
         num_threads=4
     else
-        num_threads=20
+        num_threads=30
     fi
     # Meditron uses T=0.8 for all evals in all llms
     python src/OntoRAG/benchmark/biomed.py \

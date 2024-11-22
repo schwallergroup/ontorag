@@ -6,23 +6,48 @@ import dspy
 from dotenv import load_dotenv
 from typing import Literal
 
+
+import functools
+from typing import Callable, Any
+
 __all__ = ["QAZeroShot", "QAContext", "QAReason", "QAFull", "QATwoStep"]
 
 qprompt = "Here is the question you need to answer:"
 choice_prompt = "Answer: ${answer}"
 context_prompt = "Here is the context:"
-# reasoning_prompt = "Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
 reasoning_prompt="Reasoning: Let's think step by step in order to ${reasoning}"
+
+import functools
+from typing import Callable, Any, Optional
+
+def qa_decorator(
+    reasoning: bool = False
+):
+    def decorator(func: Callable) -> Callable:
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs) -> Any:
+            try:
+                result = func(*args, **kwargs)
+                return result
+
+            except Exception as e:
+                print(f"An error occurred: {str(e)}")
+                out = dspy.Prediction(
+                    context=None,
+                    choice_answer=None
+                )
+                if reasoning:
+                    out.reasoning = None
+                return out
+        return wrapper
+    return decorator
 
 
 class MedQnA_ZeroShot(dspy.Signature):
     """Answer a question with a detailed response."""
 
     question: str = dspy.InputField(desc=qprompt)
-    answer: str = dspy.OutputField(
-        desc="Answer: ${answer}"
-    )
-    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Context(dspy.Signature):
@@ -30,10 +55,7 @@ class MedQnA_Context(dspy.Signature):
 
     context: str = dspy.InputField(desc=context_prompt)
     question: str = dspy.InputField(desc=qprompt)
-    answer: str = dspy.OutputField(
-        desc="Answer: ${answer}"
-    )
-    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Reason(dspy.Signature):
@@ -41,10 +63,7 @@ class MedQnA_Reason(dspy.Signature):
 
     question: str = dspy.InputField(desc=qprompt)
     reasoning: str = dspy.OutputField(desc=reasoning_prompt)
-    answer: str = dspy.OutputField(
-        desc="Answer: ${answer}"
-    )
-    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Full(dspy.Signature):
@@ -53,10 +72,7 @@ class MedQnA_Full(dspy.Signature):
     context: str = dspy.InputField(desc=context_prompt)
     question: str = dspy.InputField(desc=qprompt)
     reasoning: str = dspy.OutputField(desc=reasoning_prompt)
-    answer: str = dspy.OutputField(
-        desc="Answer: ${answer}"
-    )
-    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class BaseQA(dspy.Module):
@@ -76,7 +92,8 @@ class QAZeroShot(BaseQA):
         self.predict = dspy.Predict(MedQnA_ZeroShot)
 
     # docstr-coverage:inherited
-    def forward(self, qprompt: str) -> Tuple[MedQnA_ZeroShot, str]:
+    @qa_decorator()
+    def forward(self, qprompt: str) -> dspy.Prediction:
         answer = self.predict(question=qprompt)
         answer.context = None
         return answer
@@ -93,7 +110,8 @@ class QAContext(BaseQA):
         self.rm = dspy.Retrieve()
 
     # docstr-coverage:inherited
-    def forward(self, qprompt: str) -> Tuple[MedQnA_Context, str]:
+    @qa_decorator()
+    def forward(self, qprompt: str) -> dspy.Prediction:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
         answer.context = context
@@ -115,7 +133,8 @@ class QAReason(BaseQA):
         self.predictor = dspy.Predict(MedQnA_Reason)
 
     # docstr-coverage:inherited
-    def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
+    @qa_decorator(reasoning=True)
+    def forward(self, qprompt: str) -> dspy.Prediction:
         answer = self.predictor(question=qprompt)
         answer.context = None
         return answer
@@ -132,7 +151,8 @@ class QAFull(BaseQA):
         self.rm = dspy.Retriever()
 
     # docstr-coverage:inherited
-    def forward(self, qprompt: str) -> Tuple[MedQnA_Full, str]:
+    @qa_decorator(reasoning=True)
+    def forward(self, qprompt: str) -> dspy.Prediction:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
         answer.context = context
@@ -155,7 +175,8 @@ class QATwoStep(BaseQA):
         self.predictor = dspy.Predict(MedQnA_Reason)
 
     # docstr-coverage:inherited
-    def forward(self, qprompt: str) -> Tuple[MedQnA_Reason, str]:
+    @qa_decorator(reasoning=True)
+    def forward(self, qprompt: str) -> dspy.Prediction:
         answer0 = self.predictor(question=qprompt)
         answer = self.predictor(
             question=answer0.reasoning + answer0.choice_answer
