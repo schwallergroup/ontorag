@@ -18,9 +18,9 @@ METHODS = {
     # "ontorag-simple": SimpleORAG,
     # "ontorag-hypo_ans": HyQORAG,
     # "ontorag-tm": OntoRAGTM,
-    "ontorag-hypo_ans-tm": HyQOntoRAGTM,
-    # "rag-zeroshot": QAZeroShot,
-    # "rag-reason": QAReason,
+    # "ontorag-hypo_ans-tm": HyQOntoRAGTM,
+    "zeroshot": QAZeroShot,
+    # "CoT": QAReason,
     # 'rag-context': QAContext,
     # 'rag-full': QAFull,
 }
@@ -127,13 +127,13 @@ def main(
     """Run evaluation on all benchmarks."""
     _init_dspy(llm=llm, **kwargs)
     dfs = _load_biomed_benchmarks()
-    ontology = OntoRetriever(ontology_path=ontology_path)
+    # ontology = OntoRetriever(ontology_path=ontology_path)
 
     if method == "all":
         for method in METHODS.keys():
-            run_one_method(method, ontology, llm, dfs, **kwargs)
+            run_one_method(method, None, llm, dfs, **kwargs)
     elif method in METHODS:
-        run_one_method(method, ontology, llm, dfs, **kwargs)
+        run_one_method(method, None, llm, dfs, **kwargs)
     else:
         raise ValueError(f"Method {method} not found.")
 
