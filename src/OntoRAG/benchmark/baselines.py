@@ -4,20 +4,25 @@ from typing import Optional, Tuple
 
 import dspy
 from dotenv import load_dotenv
+from typing import Literal
 
 __all__ = ["QAZeroShot", "QAContext", "QAReason", "QAFull", "QATwoStep"]
 
 qprompt = "Here is the question you need to answer:"
-choice_prompt = "Answer to the question. Only one character."
+choice_prompt = "Answer: ${answer}"
 context_prompt = "Here is the context:"
-reasoning_prompt = "Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
+# reasoning_prompt = "Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
+reasoning_prompt="Reasoning: Let's think step by step in order to ${reasoning}"
 
 
 class MedQnA_ZeroShot(dspy.Signature):
     """Answer a question with a detailed response."""
 
     question: str = dspy.InputField(desc=qprompt)
-    choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    answer: str = dspy.OutputField(
+        desc="Answer: ${answer}"
+    )
+    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Context(dspy.Signature):
@@ -25,7 +30,10 @@ class MedQnA_Context(dspy.Signature):
 
     context: str = dspy.InputField(desc=context_prompt)
     question: str = dspy.InputField(desc=qprompt)
-    choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    answer: str = dspy.OutputField(
+        desc="Answer: ${answer}"
+    )
+    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Reason(dspy.Signature):
@@ -33,7 +41,10 @@ class MedQnA_Reason(dspy.Signature):
 
     question: str = dspy.InputField(desc=qprompt)
     reasoning: str = dspy.OutputField(desc=reasoning_prompt)
-    choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    answer: str = dspy.OutputField(
+        desc="Answer: ${answer}"
+    )
+    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class MedQnA_Full(dspy.Signature):
@@ -42,7 +53,10 @@ class MedQnA_Full(dspy.Signature):
     context: str = dspy.InputField(desc=context_prompt)
     question: str = dspy.InputField(desc=qprompt)
     reasoning: str = dspy.OutputField(desc=reasoning_prompt)
-    choice_answer: str = dspy.OutputField(desc=choice_prompt)
+    answer: str = dspy.OutputField(
+        desc="Answer: ${answer}"
+    )
+    # choice_answer: str = dspy.OutputField(desc=choice_prompt)
 
 
 class BaseQA(dspy.Module):

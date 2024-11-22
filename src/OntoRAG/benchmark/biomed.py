@@ -15,14 +15,16 @@ import wandb
 from OntoRAG.utils import OntoRetriever
 
 METHODS = {
-    "ontorag-simple": SimpleORAG,
-    "ontorag-hypo_ans": HyQORAG,
-    "ontorag-tm": OntoRAGTM,
-    "ontorag-hypo_ans-tm": HyQOntoRAGTM,
-    "rag-zeroshot": QAZeroShot,
-    "rag-reason": QAReason,
-    'rag-context': QAContext,
-    'rag-full': QAFull,
+    # "zeroshot": QAZeroShot,
+    # "ontorag-simple": SimpleORAG,
+    "cot": QAReason,
+    # "ontorag-hypo_ans": HyQORAG,
+    # "ontorag-tm": OntoRAGTM,
+    # "ontorag-hypo_ans-tm": HyQOntoRAGTM,
+    # "rag-zeroshot": QAZeroShot,
+    # "rag-reason": QAReason,
+    # 'rag-context': QAContext,
+    # 'rag-full': QAFull,
 }
 
 
@@ -52,6 +54,7 @@ def _load_biomed_benchmarks():
 
 def clean_model_answer(model_out):
     """Process the model output to get the answer."""
+    model_out = model_out[:9].strip("Answer:").strip()
     inter = set(model_out).intersection(set("ABCDE"))
     if len(model_out) == 1:
         if model_out in list("ABCDE"):
@@ -67,7 +70,7 @@ def clean_model_answer(model_out):
 
 def compile_results(results):
     """If model failed to answer, fill with empty prediction."""
-    empty = dspy.Prediction(reasoning="", choice_answer="")
+    empty = dspy.Prediction(reasoning="", answer="")
     cresults = [
         r if not isinstance(r[1], dict) else (r[0], empty) for r in results
     ]
@@ -77,7 +80,7 @@ def compile_results(results):
 
 def acc_metric_clean(gt, pred, trace=None):
     """Clean answer and compare with groundtruth."""
-    return gt.answer == clean_model_answer(pred.choice_answer)
+    return gt.answer == clean_model_answer(pred.answer)
 
 
 def run_benchmark(rag: dspy.Module, df, run, num_threads=4):

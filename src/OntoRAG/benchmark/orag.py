@@ -19,10 +19,10 @@ class MedQnA(dspy.Signature):
         desc="Here is the question you need to answer"
     )
     reasoning: str = dspy.OutputField(
-        desc="Before answering the question, carefully analyze the ontology context. Finalize by selecting the correct answer."
+        desc="Reasoning: Let's think step by step in order to ${reasoning}"
     )
-    choice_answer: str = dspy.OutputField(
-        desc="Answer to the question. Only one character."
+    answer: str = dspy.OutputField(
+        desc="Answer: ${answer}"
     )
 
 
