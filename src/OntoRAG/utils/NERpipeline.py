@@ -6,6 +6,9 @@ import owlready2
 import spacy
 from spacy.matcher import PhraseMatcher
 
+from spacy.util import minibatch
+from spacy.tokens import Doc
+
 
 class OntologyNER:
     def __init__(self, ontology_folder, debug=False):
@@ -17,6 +20,9 @@ class OntologyNER:
         self.concept_to_ontology = {}
         self.create_combined_matcher()
         self.lineage_cache = defaultdict(dict)
+
+        # Disable all pipes except tagger and parser
+        self.nlp.disable_pipes(*[pipe for pipe in self.nlp.pipe_names if pipe not in ['tagger', 'parser']])
 
     def process_statement(self, statement):
         """Retrieve ontology concepts from a statement."""
@@ -52,26 +58,35 @@ class OntologyNER:
         """Create a matcher for all ontologies."""
         for onto_name, ontops in self.ontologies.items():
             onto, props = ontops["ontology"], ontops["properties"]
-            patterns = []
+
+            # Collect all concepts
+            concepts = set()
             for entity in onto.classes():
-                for label in entity.label:
-                    concept = label.lower()
-                    patterns.append(self.nlp(concept))
-                    self.concept_to_ontology[concept] = onto_name
-                    # Add singular/plural variations
-                    if concept.endswith("s"):
-                        singular = concept[:-1]
-                        patterns.append(self.nlp(singular))
-                        self.concept_to_ontology[singular] = onto_name
-                    else:
-                        plural = concept + "s"
-                        patterns.append(self.nlp(plural))
-                        self.concept_to_ontology[plural] = onto_name
+                concepts.update(label.lower() for label in entity.label)
+
+            # Pre-compute singular/plural forms
+            all_forms = set()
+            for concept in concepts:
+                all_forms.add(concept)
+                if concept.endswith("s"):
+                    all_forms.add(concept[:-1])  # singular
+                else:
+                    all_forms.add(concept + "s")  # plural
+
+            # Process concepts in batches
+            patterns = []
+            for batch in minibatch(all_forms, size=500):
+                docs = list(self.nlp.pipe(batch))
+                patterns.extend(docs)
+
+            # Update concept_to_ontology
+            self.concept_to_ontology.update({form: onto_name for form in all_forms})
+
+            # Add patterns to matcher
             self.combined_matcher.add(onto_name, patterns)
+
             if self.debug:
-                print(
-                    f"Added {len(patterns)} patterns for ontology: {onto_name}"
-                )
+                print(f"Added {len(patterns)} patterns for ontology: {onto_name}")
 
     def recognize_concepts(self, text):
         """Recognize ontology concepts in a text."""
@@ -113,8 +128,9 @@ class OntologyNER:
                 "definition": definition,
             }
 
-        class IAO_0000115(owlready2.AnnotationProperty):
-            namespace = onto
+        with onto:
+            class IAO_0000115(owlready2.AnnotationProperty):
+                namespace = onto.get_namespace("http://purl.obolibrary.org/obo/")
 
         properties = {}
         for cls in onto.classes():
