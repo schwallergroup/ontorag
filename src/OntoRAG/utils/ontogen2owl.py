@@ -2,22 +2,31 @@
 
 import pickle
 import re
+from typing import Dict, Optional
 
 import owlready2
+import pandas as pd
 from owlready2 import Thing, types
 from pydantic import BaseModel
 from tree import Tree
-from typing import Optional, Dict
-import pandas as pd
 
 
 class OntoGen2Owl(BaseModel):
-    def __call__(self, wmap: str, definitions: Optional[str]=None, output_file="output_ontology.owl"):
+    def __call__(
+        self,
+        wmap: str,
+        definitions: Optional[str] = None,
+        output_file="output_ontology.owl",
+    ):
 
         with open(wmap, "rb") as f:
             relationships = pickle.load(f)["Thing"]
         if definitions:
-            defs = pd.read_csv(definitions, names=["concept", "definition"]).set_index('concept')['definition'].to_dict()
+            defs = (
+                pd.read_csv(definitions, names=["concept", "definition"])
+                .set_index("concept")["definition"]
+                .to_dict()
+            )
 
         onto = self.create_ontology_from_relationships(relationships, defs)
 
@@ -63,11 +72,14 @@ class OntoGen2Owl(BaseModel):
         words = re.findall(r"\w+", name)
         return "".join(word.capitalize() for word in words)
 
-    def create_ontology_from_relationships(self, relationships, descriptions: Optional[Dict[str, str]]=None):
+    def create_ontology_from_relationships(
+        self, relationships, descriptions: Optional[Dict[str, str]] = None
+    ):
         """Create an ontology from the relationships."""
         onto = owlready2.get_ontology("http://example.org/example.owl")
 
         with onto:
+
             class IAO_0000115(owlready2.AnnotationProperty):
                 namespace = onto
 
@@ -106,5 +118,5 @@ if __name__ == "__main__":
     transf(
         wmap=fpath + wmap_file,
         definitions=fpath + defs_file,
-        output_file=fpath + "output_ontology_0.owl"
+        output_file=fpath + "output_ontology_0.owl",
     )

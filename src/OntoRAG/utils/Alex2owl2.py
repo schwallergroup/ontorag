@@ -1,19 +1,30 @@
 import pickle
 import re
+from typing import Dict, Optional
+
 import owlready2
+import pandas as pd
 from owlready2 import Thing, types
 from pydantic import BaseModel
-import pandas as pd
-from typing import Optional, Dict
+
 
 class OntoGen2Owl(BaseModel):
-    def __call__(self, wmap: str, definitions: Optional[str]=None, output_file="output_ontology.owl"):
+    def __call__(
+        self,
+        wmap: str,
+        definitions: Optional[str] = None,
+        output_file="output_ontology.owl",
+    ):
         with open(wmap, "rb") as f:
             relationships = pickle.load(f)["Thing"]
-        
+
         defs = {}
         if definitions:
-            defs = pd.read_csv(definitions, names=["concept", "definition"]).set_index('concept')['definition'].to_dict()
+            defs = (
+                pd.read_csv(definitions, names=["concept", "definition"])
+                .set_index("concept")["definition"]
+                .to_dict()
+            )
 
         onto = self.create_ontology_from_relationships(relationships, defs)
 
@@ -21,7 +32,9 @@ class OntoGen2Owl(BaseModel):
         for cls in onto.classes():
             print(f"- {cls}")
             if cls.is_a:
-                print(f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}")
+                print(
+                    f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}"
+                )
             if cls.IAO_0000115:
                 print(f"  Definition: {cls.IAO_0000115[0]}")
 
@@ -35,11 +48,15 @@ class OntoGen2Owl(BaseModel):
         for cls in loaded_onto.classes():
             print(f"- {cls}")
             if cls.is_a:
-                print(f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}")
+                print(
+                    f"  Subclass of: {', '.join(str(parent) for parent in cls.is_a if parent != Thing)}"
+                )
             if cls.IAO_0000115:
                 print(f"  Definition: {cls.IAO_0000115[0]}")
 
-        print(f"\nNumber of classes in reloaded ontology: {len(list(loaded_onto.classes()))}")
+        print(
+            f"\nNumber of classes in reloaded ontology: {len(list(loaded_onto.classes()))}"
+        )
 
         return onto, loaded_onto
 
@@ -48,17 +65,22 @@ class OntoGen2Owl(BaseModel):
         words = re.findall(r"\w+", name)
         return "".join(word.capitalize() for word in words)
 
-    def create_ontology_from_relationships(self, relationships, definitions: Optional[Dict[str, str]]=None):
+    def create_ontology_from_relationships(
+        self, relationships, definitions: Optional[Dict[str, str]] = None
+    ):
         """Create an ontology from the relationships."""
         onto = owlready2.get_ontology("http://example.org/example.owl")
 
         with onto:
+
             class IAO_0000115(owlready2.AnnotationProperty):
                 namespace = onto
 
             for relationship in str(relationships).split("\n"):
                 try:
-                    subclass, superclass = map(str.strip, relationship.split("isA"))
+                    subclass, superclass = map(
+                        str.strip, relationship.split("isA")
+                    )
                     subclass_name = self.clean_class_name(subclass)
                     superclass_name = self.clean_class_name(superclass)
 
@@ -71,25 +93,31 @@ class OntoGen2Owl(BaseModel):
 
                     if definitions and subclass_name in definitions:
                         sub_cls.IAO_0000115.append(definitions[subclass_name])
-                        print(f"Added definition for {subclass_name}: {definitions[subclass_name]}")
+                        print(
+                            f"Added definition for {subclass_name}: {definitions[subclass_name]}"
+                        )
                 except Exception as e:
-                    print(f"Error processing relationship: {relationship}. Error: {str(e)}")
+                    print(
+                        f"Error processing relationship: {relationship}. Error: {str(e)}"
+                    )
                     continue
 
         return onto
 
+
 if __name__ == "__main__":
     import os
+
     transf = OntoGen2Owl()
-    for model in ['sacs_claude3_5', 'sacs_llama3.1:70b']:
-        fpath = f"data/ontologies/{model}/" # path with the tree files 
+    for model in ["sacs_claude3_5", "sacs_llama3.1:70b"]:
+        fpath = f"data/ontologies/{model}/"  # path with the tree files
         for i in range(5):
-            wmap_file = f"wordmap_{i}.pkl" #wordmap to use 
-            defs_file = "definitions.csv" # add definitions from csv 
+            wmap_file = f"wordmap_{i}.pkl"  # wordmap to use
+            defs_file = "definitions.csv"  # add definitions from csv
 
             os.makedirs(fpath + f"sacs_ontology_{i}", exist_ok=True)
             transf(
                 wmap=fpath + wmap_file,
                 definitions=fpath + defs_file,
-                output_file=fpath + f"sacs_ontology_{i}/sacs.owl" # output 
+                output_file=fpath + f"sacs_ontology_{i}/sacs.owl",  # output
             )

@@ -1,2 +1,1 @@
-
 from .orag import OntoTranslate

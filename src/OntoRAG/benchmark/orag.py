@@ -4,26 +4,33 @@ from typing import Literal, Optional, Tuple, Union
 
 import dspy
 from dotenv import load_dotenv
+from utils import qa_decorator
 
 from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
 
-__all__ = ["SimpleORAG", "HyQORAG", "OntoRAGTM", "HyQOntoRAGTM", "OntoTranslate"]
+__all__ = [
+    "SimpleORAG",
+    "HyQORAG",
+    "OntoRAGTM",
+    "HyQOntoRAGTM",
+    "OntoTranslate",
+]
 
 
 class MedQnA(dspy.Signature):
-    """Answer a question with a detailed response based on the given context."""
+    """Answer a question with a detailed response based on the given context.  If the context is not relevant or there is no context, answer based on your knowledge."""
 
-    context: str = dspy.InputField(desc="Here is the ontology context")
+    context: str = dspy.InputField(
+        desc="Context: This information shows the relationships between relevant concepts:"
+    )
     question: str = dspy.InputField(
-        desc="Here is the question you need to answer"
+        desc="Here is the question you need to answer:"
     )
     reasoning: str = dspy.OutputField(
         desc="Reasoning: Let's think step by step in order to ${reasoning}"
     )
-    answer: str = dspy.OutputField(
-        desc="Answer: ${answer}"
-    )
+    choice_answer: str = dspy.OutputField(desc="Answer: ${answer}")
 
 
 class OntoTranslate(dspy.Signature):
@@ -54,6 +61,7 @@ class SimpleORAG(BaseOntoRAG):
             self.ontoretriever = ontology
 
     # docstr-coverage:inherited
+    @qa_decorator()
     def forward(self, qprompt: str) -> Tuple[MedQnA, str]:
         context = self.retrieve(qprompt)
         answer = self.predictor(question=qprompt, context=context)
@@ -78,6 +86,7 @@ class HyQORAG(BaseOntoRAG):
             self.ontoretriever = ontology
 
     # docstr-coverage:inherited
+    @qa_decorator()
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         ctxt0 = self.retrieve(qprompt)
@@ -110,6 +119,7 @@ class OntoRAGTM(BaseOntoRAG):
             self.ontoretriever = ontology
 
     # docstr-coverage:inherited
+    @qa_decorator()
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt = self.retrieve(qprompt)
@@ -142,6 +152,7 @@ class HyQOntoRAGTM(BaseOntoRAG):
             self.ontoretriever = ontology
 
     # docstr-coverage:inherited
+    @qa_decorator()
     def forward(self, qprompt: str) -> MedQnA:
         # Generate hypothetical answer
         octxt0 = self.retrieve(qprompt)
@@ -164,12 +175,18 @@ class HyQOntoRAGTM(BaseOntoRAG):
 
 if __name__ == "__main__":
     load_dotenv()
-    llm = dspy.OpenAI(
-        system_prompt="",
-        model="gpt-4o-mini",
+    llm = dspy.LM(
+        model="openai/gpt-4o-mini",
         max_tokens=254,
     )
     dspy.settings.configure(lm=llm)
 
-    orag = SimpleORAG(ontology="data/test/ontologies/SNOMED", context="")
-    print(orag.forward("What kinds of health care encounters exist?"))
+    ontology = "/home/andres/Documents/ontorag/data/ontologies/REX/"
+    orag = SimpleORAG(ontology=ontology, context="")
+    print(
+        orag.forward(
+            "Thymoquinone is ineffective against radiation induced enteritis, yes or no?. Is this true? (yes/no)"
+        )
+    )
+
+    print(llm.history)

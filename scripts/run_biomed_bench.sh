@@ -23,10 +23,10 @@ run_benchmark() {
     # Meditron uses T=0.8 for all evals in all llms
     python src/OntoRAG/benchmark/biomed.py \
         --method all \
-        --ontology_path data/ontologies/GO \
+        --ontology_path data/ontologies/all/ \
         --llm "$llm" \
         --temperature 0.01 \
-        --max_tokens 512 \
+        --max_tokens 1024 \
         --num_threads "$num_threads"
     echo "Finished benchmarks for LLM: $llm"
     echo "----------------------------------------"

@@ -5,9 +5,8 @@ from collections import defaultdict
 import owlready2
 import spacy
 from spacy.matcher import PhraseMatcher
-
-from spacy.util import minibatch
 from spacy.tokens import Doc
+from spacy.util import minibatch
 
 
 class OntologyNER:
@@ -22,7 +21,13 @@ class OntologyNER:
         self.lineage_cache = defaultdict(dict)
 
         # Disable all pipes except tagger and parser
-        self.nlp.disable_pipes(*[pipe for pipe in self.nlp.pipe_names if pipe not in ['tagger', 'parser']])
+        self.nlp.disable_pipes(
+            *[
+                pipe
+                for pipe in self.nlp.pipe_names
+                if pipe not in ["tagger", "parser"]
+            ]
+        )
 
     def process_statement(self, statement):
         """Retrieve ontology concepts from a statement."""
@@ -80,13 +85,17 @@ class OntologyNER:
                 patterns.extend(docs)
 
             # Update concept_to_ontology
-            self.concept_to_ontology.update({form: onto_name for form in all_forms})
+            self.concept_to_ontology.update(
+                {form: onto_name for form in all_forms}
+            )
 
             # Add patterns to matcher
             self.combined_matcher.add(onto_name, patterns)
 
             if self.debug:
-                print(f"Added {len(patterns)} patterns for ontology: {onto_name}")
+                print(
+                    f"Added {len(patterns)} patterns for ontology: {onto_name}"
+                )
 
     def recognize_concepts(self, text):
         """Recognize ontology concepts in a text."""
@@ -129,8 +138,11 @@ class OntologyNER:
             }
 
         with onto:
+
             class IAO_0000115(owlready2.AnnotationProperty):
-                namespace = onto.get_namespace("http://purl.obolibrary.org/obo/")
+                namespace = onto.get_namespace(
+                    "http://purl.obolibrary.org/obo/"
+                )
 
         properties = {}
         for cls in onto.classes():

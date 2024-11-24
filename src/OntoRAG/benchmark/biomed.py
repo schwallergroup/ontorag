@@ -5,7 +5,7 @@ import os
 
 import dspy
 import pandas as pd
-from baselines import QAContext, QAFull, QAReason, QAZeroShot
+from baselines import QAContext, QACoT, QAZeroShot
 from csvdatasets import CSVDataset
 from dotenv import load_dotenv
 from dspy.evaluate import Evaluate
@@ -15,16 +15,12 @@ import wandb
 from OntoRAG.utils import OntoRetriever
 
 METHODS = {
-    # "zeroshot": QAZeroShot,
-    # "ontorag-simple": SimpleORAG,
-    "cot": QAReason,
-    # "ontorag-hypo_ans": HyQORAG,
-    # "ontorag-tm": OntoRAGTM,
-    # "ontorag-hypo_ans-tm": HyQOntoRAGTM,
-    # "rag-zeroshot": QAZeroShot,
-    # "rag-reason": QAReason,
-    # 'rag-context': QAContext,
-    # 'rag-full': QAFull,
+    "zeroshot": QAZeroShot,
+    "cot": QACoT,
+    "ontorag-simple": SimpleORAG,
+    "ontorag-hypo_ans": HyQORAG,
+    "ontorag-tm": OntoRAGTM,
+    "ontorag-hypo_ans-tm": HyQOntoRAGTM,
 }
 
 
@@ -47,14 +43,17 @@ def _load_biomed_benchmarks():
     dfs = {}
     for fname in os.listdir(fpath):
         if fname.endswith(".csv") and not fname.startswith("."):
-            name = fname.strip("_qs.csv")
+            name = fname.split("_qs.csv")[0]
             dfs[name] = CSVDataset(fpath + fname, name, input_keys=["qprompt"])
     return dfs
 
 
-def clean_model_answer(model_out):
+def clean_model_answer_abcde(model_out):
     """Process the model output to get the answer."""
-    model_out = model_out[:9].strip("Answer:").strip()
+    try:
+        model_out = model_out.split("Answer:")[1].strip()
+    except:
+        return None
     inter = set(model_out).intersection(set("ABCDE"))
     if len(model_out) == 1:
         if model_out in list("ABCDE"):
@@ -68,9 +67,28 @@ def clean_model_answer(model_out):
     return None
 
 
+def clean_model_answer_yesno(model_out):
+    """Process the model output to get the answer."""
+    model_out = model_out.strip().lower()
+    try:
+        model_out = model_out.split("answer:")[1].strip().lower()
+    except:
+        pass
+
+    if model_out in ["yes", "no"]:
+        return model_out
+    elif "yes" in model_out or "no" in model_out:
+        if model_out.startswith("yes"):
+            return "yes"
+        elif model_out.startswith("no"):
+            return "no"
+
+    return None
+
+
 def compile_results(results):
     """If model failed to answer, fill with empty prediction."""
-    empty = dspy.Prediction(reasoning="", answer="")
+    empty = dspy.Prediction(reasoning="", choice_answer="")
     cresults = [
         r if not isinstance(r[1], dict) else (r[0], empty) for r in results
     ]
@@ -78,16 +96,26 @@ def compile_results(results):
     return table
 
 
-def acc_metric_clean(gt, pred, trace=None):
+def acc_metric_clean_abcde(gt, pred, trace=None):
     """Clean answer and compare with groundtruth."""
-    return gt.answer == clean_model_answer(pred.answer)
+    return gt.answer == clean_model_answer_abcde(pred.choice_answer)
+
+
+def acc_metric_clean_yesno(gt, pred, trace=None):
+    """Clean answer and compare with groundtruth."""
+    return gt.answer == clean_model_answer_yesno(pred.choice_answer)
 
 
 def run_benchmark(rag: dspy.Module, df, run, num_threads=4):
     """Evaluate the method 'rag' on a dataset 'df'."""
+    if df.name == "bioasq":
+        acc_metric = acc_metric_clean_yesno
+    else:
+        acc_metric = acc_metric_clean_abcde
+
     evaluate_program = Evaluate(
         devset=df.dev,
-        metric=acc_metric_clean,
+        metric=acc_metric,
         num_threads=num_threads,
         display_progress=True,
     )
@@ -131,6 +159,7 @@ def main(
     _init_dspy(llm=llm, **kwargs)
     dfs = _load_biomed_benchmarks()
     ontology = OntoRetriever(ontology_path=ontology_path)
+    # ontology = None
 
     if method == "all":
         for method in METHODS.keys():

@@ -1,46 +1,19 @@
 """Baseline methods for biomed Q&A benchmarks."""
 
-from typing import Optional, Tuple
+from typing import Literal, Optional, Tuple
 
 import dspy
 from dotenv import load_dotenv
-from typing import Literal
+from utils import qa_decorator
 
-
-import functools
-from typing import Callable, Any
-
-__all__ = ["QAZeroShot", "QAContext", "QAReason", "QAFull", "QATwoStep"]
+__all__ = ["QAZeroShot", "QAContext", "QACoT", "RAGCoT", "QATwoStep"]
 
 qprompt = "Here is the question you need to answer:"
-choice_prompt = "Answer: ${answer}"
+choice_prompt = "Answer: ${answer} (yes/no)"
 context_prompt = "Here is the context:"
-reasoning_prompt="Reasoning: Let's think step by step in order to ${reasoning}"
-
-import functools
-from typing import Callable, Any, Optional
-
-def qa_decorator(
-    reasoning: bool = False
-):
-    def decorator(func: Callable) -> Callable:
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs) -> Any:
-            try:
-                result = func(*args, **kwargs)
-                return result
-
-            except Exception as e:
-                print(f"An error occurred: {str(e)}")
-                out = dspy.Prediction(
-                    context=None,
-                    choice_answer=None
-                )
-                if reasoning:
-                    out.reasoning = None
-                return out
-        return wrapper
-    return decorator
+reasoning_prompt = (
+    "Reasoning: Let's think step by step in order to ${reasoning}"
+)
 
 
 class MedQnA_ZeroShot(dspy.Signature):
@@ -123,7 +96,7 @@ class QAContext(BaseQA):
         return "\n".join(passages)
 
 
-class QAReason(BaseQA):
+class QACoT(BaseQA):
     """Ask question, get reasoning and answer."""
 
     def __init__(
@@ -140,8 +113,8 @@ class QAReason(BaseQA):
         return answer
 
 
-class QAFull(BaseQA):
-    """Ask question, quert context, get reasoning and answer."""
+class RAGCoT(BaseQA):
+    """Ask question, query context, get reasoning and answer."""
 
     def __init__(
         self, ontology: Optional[str] = None, context: Optional[str] = None
@@ -189,10 +162,16 @@ if __name__ == "__main__":
     load_dotenv()
     llm = dspy.OpenAI(
         system_prompt="",
-        model="gpt-4o-mini",
+        model="openai/gpt-4o-mini",
         max_tokens=254,
     )
     dspy.settings.configure(lm=llm)
 
     orag = QAZeroShot(context="")
-    print(orag.forward("What kinds of health care encounters exist?"))
+    print(
+        orag.forward(
+            "Thymoquinone is ineffective against radiation induced enteritis, yes or no?. Is this true? (yes/no)"
+        )
+    )
+
+    print(llm.history)

@@ -9,6 +9,7 @@ answer_col = {
     "medmcqa": lambda x: x["answer"].replace(
         {i + 1: v for i, v in enumerate(["A", "B", "C", "D"])}
     ),
+    "bioasq": lambda x: x["answer"],
 }
 
 
