@@ -1,12 +1,15 @@
 # TERMO: Term Extraction from Scientific Literature
 
-<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
-</a>
-
 TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
 
 ![Pipeline](docs/vocab.png)
+
+# Table of Contents
+
+- [1. Requirements](#1-requirements)
+- [2. Installation and Setup](#2-installation-and-setup)
+- [3. Usage](#3-usage)
+- [4. Example](#4-example)
 
 # 1. Requirements
 
@@ -61,4 +64,13 @@ definitions = termo.extract_definitions(model="llama3.1:70b")
 termo['terms'] = terms  # terms extracted in the first step
 relationships = termo.extract_relationships(model="llama3.1:70b")
 ```
+
+# 4. Example
+
+You can find an example of how to use TERMO in the following [notebook](example.ipynb).
+
+<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
+</a>
+
 

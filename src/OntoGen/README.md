@@ -53,7 +53,9 @@ python extract_sections.py \
 
 ### 3.3. Extract terms, acronyms, definitions, and relationships
 
-<img src="docs/vocab.png" alt="Extract terms, acronyms, definitions, and relationships" width="400"/>
+<p align="center">
+<img src="docs/vocab.png" alt="Extract terms, acronyms, definitions, and relationships" width="500"/>
+</p>
 
 ```bash
 python run_termo.py \
@@ -68,7 +70,9 @@ python run_termo.py \
 
 ### 3.4. Generate categories
 
-<img src="docs/rect1-99-7.png" alt="Generate categories" width="400"/>
+<p align="center">
+<img src="docs/rect1-99-7.png" alt="Generate categories" width="500"/>
+</p>
 
 ```bash
 python generate_categories.py \
@@ -87,7 +91,9 @@ python generate_categories.py \
 
 ### 3.5. Generate taxonomy
 
-<img src="docs/rect66.png" alt="Generate categories" width="400"/>
+<p align="center">
+<img src="docs/rect66.png" alt="Generate categories" width="500"/>
+</p>
 
 ```bash
 python generate_taxonomy.py \
@@ -158,7 +164,9 @@ docs/2304.05376.processed.nougat.introduction.txt \
 
 To visualize the generated taxonomy, see the ```visualize_taxonomy.ipynb``` notebook.
 
-<img src="docs/output.png" alt="Generated taxonomy" width="400"/>
+<p align="center">
+<img src="docs/output.png" alt="Generated taxonomy" width="500"/>
+</p>
 
 ## 🔍 5. TERMO: [Termo package](/src/OntoGen/termo/)
 
