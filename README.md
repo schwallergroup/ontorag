@@ -1,28 +1,29 @@
 
 
 <br>
-
+<!--
 [![tests](https://github.com/schwallergroup/ontorag/actions/workflows/tests.yml/badge.svg)](https://github.com/schwallergroup/ontorag)
 [![DOI:10.1101/2020.07.15.204701](https://zenodo.org/badge/DOI/10.48550/arXiv.2304.05376.svg)](https://doi.org/10.48550/arXiv.2304.05376)
 [![PyPI](https://img.shields.io/pypi/v/ontorag)](https://img.shields.io/pypi/v/ontorag)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ontorag)](https://img.shields.io/pypi/pyversions/ontorag)
 [![Documentation Status](https://readthedocs.org/projects/OntoRAG/badge/?version=latest)](https://OntoRAG.readthedocs.io/en/latest/?badge=latest)
+-->
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Cookiecutter template from @SchwallerGroup](https://img.shields.io/badge/Cookiecutter-schwallergroup-blue)](https://github.com/schwallergroup/liac-repo)
 [![Learn more @SchwallerGroup](https://img.shields.io/badge/Learn%20%0Amore-schwallergroup-blue)](https://schwallergroup.github.io)
-
-
 
 
 <h1 align="center">
   OntoRAG
 </h1>
 
+<p align="center">
+  <b>Ontology-based RAG for Scientific Discovery</b>
+</p>
 
 <br>
 
-
-Ontology-based RAG for Scientific Discovery
 
 ## 🔥 Usage
 
@@ -47,21 +48,16 @@ The most recent code and data can be installed directly from GitHub with:
 $ pip install git+https://github.com/schwallergroup/ontorag.git
 ```
 
+## 📂 OntoGen: [Ontogen package](src/OntoGen/)
+
+The OntoGen package is a tool for generating ontologies from a set of text documents. Ontogen is located in ```src/OntoGen``` directory. 
+
+For more details see the [OntoGen README](src/OntoGen/README.md).
+
 ## ✅ Citation
 
-Philippe Schwaller et al. "Molecular Transformer: A Model for Uncertainty-Calibrated Chemical Reaction Prediction". ACS Central Science 2019 5 (9), 1572-1583
+Andres M Bran. et al. OntoRAG - Ontology-based RAG for Scientific Discovery
 ```bibtex
-@article{doi:10.1021/acscentsci.9b00576,
-    author = {Schwaller, Philippe and Laino, Teodoro and Gaudin, Théophile and Bolgar, Peter and Hunter, Christopher A. and Bekas, Costas and Lee, Alpha A.},
-    title = {Molecular Transformer: A Model for Uncertainty-Calibrated Chemical Reaction Prediction},
-    journal = {ACS Central Science},
-    volume = {5},
-    number = {9},
-    pages = {1572-1583},
-    year = {2019},
-    doi = {10.1021/acscentsci.9b00576},
-}
-
 @Misc{this_repo,
   author = { Andres M Bran },
   title = { OntoRAG - Ontology-based RAG for Scientific Discovery },
@@ -70,7 +66,6 @@ Philippe Schwaller et al. "Molecular Transformer: A Model for Uncertainty-Calibr
   url = {https://github.com/schwallergroup/ontorag }
 }
 ```
-
 
 ## 🛠️ For Developers
 

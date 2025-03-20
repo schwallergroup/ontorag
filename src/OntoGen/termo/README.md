@@ -6,7 +6,7 @@ TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_,
 
 # 1. Requirements
 
-- __Ollama__ : TERMO is built using Ollama, a tool for running inference on LLMs. See [Ollama](https://ollama.com/) for instalation instructions.
+- __Ollama__ : TERMO uses Ollama to run inference on LLMs. See [Ollama](https://ollama.com/) for instalation instructions.
 
 # 2. Installation and Setup
 
