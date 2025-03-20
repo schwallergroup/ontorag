@@ -10,11 +10,11 @@ OntoGen is a tool for generating taxonomies from scientific literature using Lar
 
 ## Table of Contents
 
-- [1. Requirements](#1-requirements)
-- [2. Installation and Setup](#2-installation-and-setup)
-- [3. Usage](#3-usage)
-- [4. Example: from paper to taxonomy](#4-example-from-paper-to-taxonomy)
-- [5. TERMO: Termo package](/src/OntoGen/termo/)
+- [1. Requirements](#-1-requirements)
+- [2. Installation and Setup](#-2-installation-and-setup)
+- [3. Usage](#-3-usage)
+- [4. Example: from paper to taxonomy](#-4-example-from-paper-to-taxonomy)
+- [5. TERMO: Termo package](#-5-termo-termo-package)
 
 ## 📦 1. Requirements
 
@@ -53,7 +53,7 @@ python extract_sections.py \
 
 ### 3.3. Extract terms, acronyms, definitions, and relationships
 
-![Output taxonomy](docs/vocab.png "Extract terms, acronyms, definitions, and relationships")
+<img src="docs/vocab.png" alt="Extract terms, acronyms, definitions, and relationships" width="400"/>
 
 ```bash
 python run_termo.py \
@@ -68,7 +68,7 @@ python run_termo.py \
 
 ### 3.4. Generate categories
 
-![Output taxonomy](docs/rect1-99-7.png "Generate categories")
+<img src="docs/rect1-99-7.png" alt="Generate categories" width="400"/>
 
 ```bash
 python generate_categories.py \
@@ -87,7 +87,7 @@ python generate_categories.py \
 
 ### 3.5. Generate taxonomy
 
-![Output taxonomy](docs/rect66.png "Generate categories")
+<img src="docs/rect66.png" alt="Generate categories" width="400"/>
 
 ```bash
 python generate_taxonomy.py \
@@ -158,9 +158,13 @@ docs/2304.05376.processed.nougat.introduction.txt \
 
 To visualize the generated taxonomy, see the ```visualize_taxonomy.ipynb``` notebook.
 
-![Output taxonomy](docs/output.png "Generated taxonomy")
+<img src="docs/output.png" alt="Generated taxonomy" width="400"/>
 
 ## 🔍 5. TERMO: [Termo package](/src/OntoGen/termo/)
+
+<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
+</a>
 
 TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
 
