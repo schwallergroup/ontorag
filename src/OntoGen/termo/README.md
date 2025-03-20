@@ -37,7 +37,7 @@ export ANTHROPIC_API_KEY=<YOUR_API_KEY>
 
 ## 3. Usage
 
-## 3.1. Term Extraction
+### 3.1. Term Extraction
 
 ```python
 my_text = "The Calvin cycle, light-independent reactions, bio synthetic phase..."
@@ -46,21 +46,21 @@ termo = Termo(my_text)
 terms = termo.extract_terms(model="llama3.1:70b")
 ```
 
-## 3.2. Acronym Extraction
+### 3.2. Acronym Extraction
 
 ```python
 termo['terms'] = terms  # terms extracted in the first step
 acronyms = termo.extract_acronyms(model="llama3.1:70b")
 ```
 
-## 3.3. Definition Extraction
+### 3.3. Definition Extraction
 
 ```python
 termo['terms'] = terms  # terms extracted in the first step
 definitions = termo.extract_definitions(model="llama3.1:70b")
 ```
 
-## 3.4. Relationship Extraction
+### 3.4. Relationship Extraction
 
 ```python
 termo['terms'] = terms  # terms extracted in the first step

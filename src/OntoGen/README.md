@@ -170,10 +170,10 @@ To visualize the generated taxonomy, see the ```visualize_taxonomy.ipynb``` note
 
 ## 🔍 5. TERMO: [Termo package](/src/OntoGen/termo/)
 
-<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
-</a>
-
 TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
 
 See the TERMO package [README](/src/OntoGen/termo/README.md) for more details.
+
+<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
+</a>
