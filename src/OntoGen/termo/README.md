@@ -2,20 +2,22 @@
 
 TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
 
-![Pipeline](docs/vocab.png)
+<p align="center">
+<img src="docs/vocab.png" alt="Extract terms, acronyms, definitions, and relationships" width="600"/>
+</p>
 
-# Table of Contents
+## Table of Contents
 
 - [1. Requirements](#1-requirements)
 - [2. Installation and Setup](#2-installation-and-setup)
 - [3. Usage](#3-usage)
 - [4. Example](#4-example)
 
-# 1. Requirements
+## 1. Requirements
 
 - __Ollama__ : TERMO uses Ollama to run inference on LLMs. See [Ollama](https://ollama.com/) for instalation instructions.
 
-# 2. Installation and Setup
+## 2. Installation and Setup
 
 ```bash
 pip install -r requirements.txt
@@ -33,7 +35,7 @@ If instead of Ollama you want to use TERMO with [Anthropic API](https://docs.ant
 export ANTHROPIC_API_KEY=<YOUR_API_KEY>
 ```
 
-# 3. Usage
+## 3. Usage
 
 ## 3.1. Term Extraction
 
@@ -65,7 +67,7 @@ termo['terms'] = terms  # terms extracted in the first step
 relationships = termo.extract_relationships(model="llama3.1:70b")
 ```
 
-# 4. Example
+## 4. Example
 
 You can find an example of how to use TERMO in the following [notebook](example.ipynb).
 
