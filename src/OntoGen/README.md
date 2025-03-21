@@ -6,28 +6,33 @@
 </h1>
 <br>
 
-- [1. Requirements](#1-requirements)
-- [2. Installation and Setup](#2-installation-and-setup)
-- [3. Usage](#3-usage)
-- [4. Example: from paper to taxonomy](#4-example-from-paper-to-taxonomy)
+OntoGen is a tool for generating taxonomies from scientific literature using Large Language Models (LLMs).
 
-## 1. Requirements
+## Table of Contents
 
-- __Ollama__ : OntoGen is built using Ollama, a tool for running inference on LLMs. See [Ollama](https://ollama.com/) for instalation instructions.
+- [1. Requirements](#-1-requirements)
+- [2. Installation and Setup](#-2-installation-and-setup)
+- [3. Usage](#-3-usage)
+- [4. Example: from paper to taxonomy](#-4-example-from-paper-to-taxonomy)
+- [5. TERMO: Termo package](#-5-termo-termo-package)
 
-## 2. Installation and Setup
+## 📦 1. Requirements
+
+- __Ollama__ : OntoGen uses Ollam to run inference on LLMs. See [Ollama](https://ollama.com/) for instalation instructions.
+
+## 👩‍💻 2. Installation and Setup
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Termo uses trasnformer model ```en_core_web_trf``` from Scapy which should be downloaded beforehand:
+[Termo](/src/OntoGen/termo/) uses trasnformer model ```en_core_web_trf``` from Scapy which should be downloaded beforehand:
 
 ```bash
 python -m spacy download en_core_web_trf
 ```
 
-## 3. Usage
+## 🔥 3. Usage
 
 ### 3.1. Extract plain text from PDF
 
@@ -46,9 +51,11 @@ python extract_sections.py \
 <YOUR-PLAIN-TEXT-FILE>
 ```
 
-## 3.3. Extract terms, acronyms, definitions, and relationships
+### 3.3. Extract terms, acronyms, definitions, and relationships
 
-![Output taxonomy](docs/vocab.png "Extract terms, acronyms, definitions, and relationships")
+<p align="center">
+<img src="docs/vocab.png" alt="Extract terms, acronyms, definitions, and relationships" width="500"/>
+</p>
 
 ```bash
 python run_termo.py \
@@ -63,7 +70,9 @@ python run_termo.py \
 
 ### 3.4. Generate categories
 
-![Output taxonomy](docs/rect1-99-7.png "Generate categories")
+<p align="center">
+<img src="docs/rect1-99-7.png" alt="Generate categories" width="500"/>
+</p>
 
 ```bash
 python generate_categories.py \
@@ -82,7 +91,9 @@ python generate_categories.py \
 
 ### 3.5. Generate taxonomy
 
-![Output taxonomy](docs/rect66.png "Generate categories")
+<p align="center">
+<img src="docs/rect66.png" alt="Generate categories" width="500"/>
+</p>
 
 ```bash
 python generate_taxonomy.py \
@@ -94,7 +105,7 @@ python generate_taxonomy.py \
 ```
 
 
-## 4. Example: from paper to taxonomy
+## 📊 4. Example: from paper to taxonomy
 
 ```bash
 python extract_plain_text.py  --recompute  --no-skipping  --model='0.1.0-base'  --batchsize=10  docs/2304.05376.pdf
@@ -153,4 +164,16 @@ docs/2304.05376.processed.nougat.introduction.txt \
 
 To visualize the generated taxonomy, see the ```visualize_taxonomy.ipynb``` notebook.
 
-![Output taxonomy](docs/output.png "Generated taxonomy")
+<p align="center">
+<img src="docs/output.png" alt="Generated taxonomy" width="500"/>
+</p>
+
+## 🔍 5. TERMO: [Termo package](/src/OntoGen/termo/)
+
+TERMO is a tool for in-context extraction of _terms_, _acronyms_, _definitions_, and _relationships_ from scientific literature using Large Language Models (LLMs).
+
+See the TERMO package [README](/src/OntoGen/termo/README.md) for more details.
+
+<a target="_blank" href="https://colab.research.google.com/github/schwallergroup/ontorag/blob/main/src/OntoGen/termo/example.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="TERMO example"/>
+</a>

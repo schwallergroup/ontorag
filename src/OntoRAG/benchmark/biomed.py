@@ -5,13 +5,13 @@ import os
 
 import dspy
 import pandas as pd
+import wandb
 from baselines import QAContext, QACoT, QAZeroShot
 from csvdatasets import CSVDataset
 from dotenv import load_dotenv
 from dspy.evaluate import Evaluate
 from orag import HyQOntoRAGTM, HyQORAG, OntoRAGTM, SimpleORAG
 
-import wandb
 from OntoRAG.utils import OntoRetriever
 
 METHODS = {
