@@ -58,12 +58,12 @@ For more details see the [OntoGen README](src/OntoGen/README.md).
 
 Andres M Bran. et al. OntoRAG - Ontology-based RAG for Scientific Discovery
 ```bibtex
-@Misc{this_repo,
-  author = { Andres M Bran },
-  title = { OntoRAG - Ontology-based RAG for Scientific Discovery },
-  howpublished = {Github},
-  year = {2023},
-  url = {https://github.com/schwallergroup/ontorag }
+@Misc{ontorag_bran2025,
+    author = {Bran, Andres M and Oarga, Alexandru and Hart, Matthew and Lederbauer, Magdalena and Schwaller, Philippe},
+    title = {OntoRAG - Ontology-based RAG for Scientific Discovery},
+    howpublished = {Github},
+    year = {2025},
+    url = {https://github.com/schwallergroup/ontorag}
 }
 ```
 
