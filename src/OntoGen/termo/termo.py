@@ -5,7 +5,12 @@ from functools import cmp_to_key
 import anthropic
 import ollama
 import spacy
-from prompt import prompt_abstract, prompt_acronym, prompt_definitions, prompt_triplets
+from prompt import (
+    prompt_abstract,
+    prompt_acronym,
+    prompt_definitions,
+    prompt_triplets,
+)
 from thinc.api import require_gpu, set_gpu_allocator
 
 

@@ -4,7 +4,7 @@ import json
 from typing import Dict, List, Optional, Tuple, Union
 
 import dspy
-from dsp.utils import deduplicate
+from dspy.dsp.utils import deduplicate
 
 from .utils import OntoRetriever
 

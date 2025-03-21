@@ -4,7 +4,7 @@ from typing import Literal, Optional, Tuple, Union
 
 import dspy
 from dotenv import load_dotenv
-from utils import qa_decorator
+from .utils import qa_decorator
 
 from OntoRAG.ontorag import BaseOntoRAG
 from OntoRAG.utils import OntoRetriever
