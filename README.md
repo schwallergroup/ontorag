@@ -27,9 +27,31 @@
 
 ## 🔥 Usage
 
-> TODO show in a very small amount of space the **MOST** useful thing your package can do.
-> Make it as short as possible! You have an entire set of docs for later.
+OntoRAG lets you define a Q&A system that is grounded to predefined ontologies of specific fields.
 
+```python
+from OntoRAG.ontorag import OntoRAG
+
+# Initialize OntoRAG with your ontology
+orag = OntoRAG(
+    ontology_path="path/to/your/ontology",
+)
+
+# Ask a question (in the domain of the ontology)
+question = "What's the difference between DNA and RNA"
+answer = orag.forward(question)
+print(answer)
+```
+
+You'll need to set up your OpenAI API key in your environment:
+```bash
+export OPENAI_API_KEY='your-api-key-here'
+```
+
+Or use a `.env` file:
+```
+OPENAI_API_KEY=your-api-key-here
+```
 
 ## 👩‍💻 Installation
 
